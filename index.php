@@ -5,7 +5,7 @@ session_start();
 
 // Router MVC: si viene page=..., ejecuta el controlador
 if (isset($_GET['page']) && trim($_GET['page']) !== '') {
-    require __DIR__.'/vendor/autoload.php';
+    require __DIR__ . '/vendor/autoload.php';
 
     try {
         Utilities\Site::configure();
@@ -19,7 +19,7 @@ if (isset($_GET['page']) && trim($_GET['page']) !== '') {
         exit;
     } catch (Controllers\PrivateNoLoggedException $ex) {
         $redirTo = urlencode(Utilities\Context::getContextByKey('request_uri'));
-        Utilities\Site::redirectTo('index.php?page=Sec_Login&redirto='.$redirTo);
+        Utilities\Site::redirectTo('index.php?page=Sec_Login&redirto=' . $redirTo);
         exit;
     } catch (Exception $ex) {
         Utilities\Site::logError($ex, 500);
@@ -52,16 +52,16 @@ $userEmail = $_SESSION['userEmail'] ?? '';
 
 <head>
     <meta charset="UTF-8">
-    <title>Cédrika | Inicio</title>
+    <title>SmartClinic | Inicio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --cedro: #5C4033;
-            --dorado: #C5A059;
-            --arena: #F7F1EB;
+            --cedro: #1A6F8A;
+            --dorado: #67C7B1;
+            --arena: #F2F8FB;
             --blanco: #ffffff;
-            --gris: #777;
-            --sombra: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --gris: #4A6170;
+            --sombra: 0 8px 24px rgba(26, 111, 138, 0.18);
             --radio: 18px;
         }
 
@@ -129,7 +129,7 @@ $userEmail = $_SESSION['userEmail'] ?? '';
         }
 
         .badge {
-            background: #d35400;
+            background: #1190a8;
             color: white;
             padding: 3px 8px;
             border-radius: 999px;
@@ -140,8 +140,8 @@ $userEmail = $_SESSION['userEmail'] ?? '';
         .hero {
             min-height: 88vh;
             background:
-                radial-gradient(circle at 85% 20%, rgba(197, 160, 89, 0.35), transparent 48%),
-                linear-gradient(120deg, rgba(31, 20, 15, 0.72), rgba(92, 64, 51, 0.58)),
+                radial-gradient(circle at 20% 20%, rgba(103, 199, 177, 0.28), transparent 40%),
+                linear-gradient(120deg, rgba(16, 90, 115, 0.75), rgba(103, 199, 177, 0.22)),
                 url('img/hero-panel.jpg') center/cover;
             display: flex;
             align-items: center;
@@ -154,11 +154,12 @@ $userEmail = $_SESSION['userEmail'] ?? '';
 
         .hero-content {
             width: min(980px, 100%);
-            background: #4b3328;
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(16, 90, 115, 0.16);
             border-radius: 22px;
             padding: 34px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+            box-shadow: 0 16px 40px rgba(16, 90, 115, 0.14);
+            color: #173a46;
         }
 
         .hero h1 {
@@ -173,7 +174,7 @@ $userEmail = $_SESSION['userEmail'] ?? '';
             line-height: 1.8;
             margin-bottom: 26px;
             max-width: 680px;
-            color: rgba(255, 255, 255, 0.95);
+            color: #173a46;
         }
 
         .hero-actions {
@@ -195,23 +196,23 @@ $userEmail = $_SESSION['userEmail'] ?? '';
         }
 
         .btn-main:hover {
-            background: #b08c4d;
+            background: #4fa9a0;
         }
 
         .btn-ghost {
             display: inline-block;
             background: transparent;
-            color: white;
+            color: var(--cedro);
             padding: 14px 30px;
             border-radius: 999px;
             font-weight: bold;
             text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(16, 90, 115, 0.45);
             transition: 0.3s;
         }
 
         .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.14);
+            background: rgba(16, 90, 115, 0.1);
         }
 
         .section {
@@ -341,14 +342,14 @@ $userEmail = $_SESSION['userEmail'] ?? '';
 
     <header class="header">
         <a href="index.php" class="logo-box">
-            <img src="img/logo-cedrika.png" alt="logo" class="logo-img">
-            <span class="logo-txt">CÉDRIKA</span>
+            <img src="img/logo-cedrika.png" alt="logo SmartClinic" class="logo-img">
+            <span class="logo-txt">SmartClinic</span>
         </a>
 
         <nav class="nav-menu">
             <a href="index.php">Inicio</a>
-            <a href="index.php?page=Checkout_Catalogo">Catálogo</a>
-            <a href="index.php?page=Checkout_Checkout">🛒 Carrito <span class="badge"><?php echo $cart_count; ?></span></a>
+            <a href="index.php?page=Checkout_Catalogo">Servicios</a>
+            <a href="index.php?page=Checkout_Checkout">🩺 Citas <span class="badge"><?php echo $cart_count; ?></span></a>
             <?php if ($isLogged) { ?>
                 <a href="index.php?page=Security_Perfil" style="color: var(--cedro); font-weight:700; text-decoration:none;">Hola, <?php echo htmlspecialchars($userName); ?></a>
                 <a href="index.php?page=Sec_Logout">Cerrar Sesión</a>
@@ -361,13 +362,13 @@ $userEmail = $_SESSION['userEmail'] ?? '';
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Elegancia artesanal para cada rincón</h1>
+            <h1>Atención médica integral con tecnología humana</h1>
             <p>
-                Descubre nuestra colección exclusiva de muebles para sala, comedor y escritorio.
-                Diseños modernos, acabados finos y esencia catracha.
+                SmartClinic te acompaña con servicios de salud confiables, rápidos y personalizados.
+                Agenda tus consultas y gestiona tu atención desde un solo lugar.
             </p>
             <div class="hero-actions">
-                <a href="index.php?page=Checkout_Catalogo" class="btn-main">Explorar Catálogo</a>
+                <a href="index.php?page=Checkout_Catalogo" class="btn-main">Ver servicios</a>
                 <?php if (!$isLogged) { ?>
                     <a href="index.php?page=Sec_Login" class="btn-ghost">Ingresar</a>
                 <?php } ?>
@@ -376,63 +377,62 @@ $userEmail = $_SESSION['userEmail'] ?? '';
     </section>
 
     <section class="section">
-        <h2>Nuestras Categorías</h2>
-        <p>Encuentra piezas ideales para transformar tu hogar con estilo, comodidad y personalidad.</p>
+        <h2>Servicios de SmartClinic</h2>
+        <p>Accede a soluciones médicas diseñadas para brindar seguridad, rapidez y bienestar a tu familia.</p>
 
         <div class="cards">
             <div class="card">
-                <h3>Sala</h3>
-                <p>Sofás, mesas de centro, sillones y muebles decorativos para tu sala.</p>
+                <h3>Consultas Médicas</h3>
+                <p>Agenda atención presencial y virtual con especialistas en medicina general y diferentes especialidades.</p>
             </div>
             <div class="card">
-                <h3>Comedor</h3>
-                <p>Mesas, sillas, vitrinas y bufeteras para compartir en familia.</p>
+                <h3>Telemedicina</h3>
+                <p>Atención remota para revisiones, segundas opiniones y seguimiento de tratamientos desde casa.</p>
             </div>
             <div class="card">
-                <h3>Escritorio</h3>
-                <p>Escritorios, sillas ejecutivas, libreros y muebles funcionales para trabajar.</p>
+                <h3>Apoyo Diagnóstico</h3>
+                <p>Ordenes de laboratorio, estudios de imagen y resultados digitales en un mismo lugar.</p>
             </div>
         </div>
     </section>
 
     <section class="section">
-        <h2>Sobre Nuestra Tienda</h2>
+        <h2>Sobre SmartClinic</h2>
         <p>
-            En <strong>CÉDRIKA</strong> nos especializamos en muebles elegantes, funcionales y modernos
-            para transformar cada espacio de tu hogar u oficina. Nos enfocamos en ofrecer calidad,
-            diseño y confort en cada pieza.
+            En <strong>SmartClinic</strong> combinamos experiencia médica y herramientas digitales para
+            entregar atención cálida, oportuna y accesible. Nuestro enfoque es tu salud integral.
         </p>
 
         <div class="cards">
             <div class="card">
-                <h3>Calidad Garantizada</h3>
-                <p>Trabajamos con materiales duraderos y acabados finos para brindar muebles resistentes y atractivos.</p>
+                <h3>Confianza Clínica</h3>
+                <p>Profesionales certificados y procesos que garantizan atención segura en cada consulta.</p>
             </div>
             <div class="card">
-                <h3>Diseño Exclusivo</h3>
-                <p>Nuestros estilos están pensados para adaptarse a hogares modernos, elegantes y acogedores.</p>
+                <h3>Atención a tu ritmo</h3>
+                <p>Reserva tu cita en línea, recibe recordatorios y accede a tus resultados desde el portal.</p>
             </div>
             <div class="card">
-                <h3>Atención Personalizada</h3>
-                <p>Buscamos ayudarte a encontrar el mueble ideal según tus gustos, espacio y necesidades.</p>
+                <h3>Soporte permanente</h3>
+                <p>Nuestro equipo te acompaña antes, durante y después de cada servicio de salud.</p>
             </div>
         </div>
     </section>
 
     <section class="section">
-        <h2>Inspiración para tu Espacio</h2>
-        <p>Algunas ilustraciones de ambientes que reflejan el estilo que ofrecemos en Cédrika.</p>
+        <h2>Entornos de atención</h2>
+        <p>Conoce los espacios seguros y modernos donde cuidamos tu salud con calidez humana.</p>
 
         <div class="gallery">
-            <img src="img/ilustracion-sala.jpg" alt="Sala elegante">
-            <img src="img/ilustracion-comedor.jpg" alt="Comedor moderno">
-            <img src="img/ilustracion-escritorio.jpg" alt="Escritorio elegante">
+            <img src="img/ilustracion-sala.jpg" alt="Sala de espera clínica">
+            <img src="img/ilustracion-comedor.jpg" alt="Consultorio moderno">
+            <img src="img/ilustracion-escritorio.jpg" alt="Atención médica virtual">
         </div>
     </section>
 
     <section class="section">
-        <h2>Reseñas de Clientes</h2>
-        <p>La experiencia de nuestros clientes es parte esencial de nuestra identidad.</p>
+        <h2>Testimonios de pacientes</h2>
+        <p>La experiencia de nuestros pacientes es parte esencial de nuestra atención en SmartClinic.</p>
 
         <div class="reviews">
             <div class="review-card">
@@ -456,7 +456,7 @@ $userEmail = $_SESSION['userEmail'] ?? '';
     </section>
 
     <footer>
-        <p>© 2026 CÉDRIKA | La Ceiba, Honduras</p>
+        <p>© 2026 SmartClinic | Salud y Bienestar</p>
     </footer>
 
 </body>

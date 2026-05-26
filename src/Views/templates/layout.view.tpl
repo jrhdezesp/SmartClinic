@@ -7,12 +7,12 @@
   <title>{{SITE_TITLE}}</title>
   <style>
     :root {
-      --cedro: #5C4033;
-      --dorado: #C5A059;
-      --arena: #F7F1EB;
+      --cedro: #105A73;
+      --dorado: #67C7B1;
+      --arena: #EDF7FB;
       --blanco: #ffffff;
-      --gris: #777;
-      --sombra: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --gris: #4A6170;
+      --sombra: 0 8px 24px rgba(16, 90, 115, 0.16);
       --radio: 18px;
     }
 
@@ -91,7 +91,7 @@
     }
 
     .badge {
-      background: #d35400;
+      background: #1190a8;
       color: white;
       padding: 3px 8px;
       border-radius: 999px;
@@ -161,14 +161,14 @@
 <body>
   <header class="header">
     <a href="index.php" class="logo-box">
-      <img src="img/logo-cedrika.png" alt="logo" class="logo-img">
-      <span class="logo-txt">CÉDRIKA</span>
+      <img src="img/logo-cedrika.png" alt="logo SmartClinic" class="logo-img">
+      <span class="logo-txt">SmartClinic</span>
     </a>
 
     <nav class="nav-menu">
       <a href="index.php">Inicio</a>
-      <a href="index.php?page=Checkout_Catalogo">Catálogo</a>
-      <a href="index.php?page=Checkout_Checkout">🛒 Carrito {{foreach CartCount}}<span class="badge">{{this}}</span>{{endfor CartCount}}</a>
+      <a href="index.php?page=Checkout_Catalogo">Servicios</a>
+      <a href="index.php?page=Checkout_Checkout">🩺 Citas {{foreach CartCount}}<span class="badge">{{this}}</span>{{endfor CartCount}}</a>
       {{if login}}
       <a href="index.php?page=Security_Perfil" style="color: var(--cedro); font-weight:700; text-decoration:none;">Hola, {{userName}}</a>
       <a href="index.php?page=Sec_Logout">Cerrar Sesión</a>
@@ -184,8 +184,7 @@
   </main>
 
   <footer>
-    <p>© {{~CURRENT_YEAR}} CÉDRIKA | La Ceiba, Honduras</p>
-  </footer>
+    <p>© {{~CURRENT_YEAR}} SmartClinic | Salud y Bienestar</p>
 
   {{foreach EndScripts}}
   <script src="{{~BASE_DIR}}/{{this}}"></script>

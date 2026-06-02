@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{SITE_TITLE}} | Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   {{if FONT_AWESOME_KIT}}
   <script src="https://kit.fontawesome.com/{{FONT_AWESOME_KIT}}.js" crossorigin="anonymous"></script>
   {{endif FONT_AWESOME_KIT}}
@@ -18,13 +18,14 @@
 
   <style>
     :root {
-      --cedro: #5C4033;
-      --dorado: #C5A059;
-      --arena: #F7F1EB;
-      --sombra: 0 8px 24px rgba(0,0,0,0.08);
+      --cedro: #033b9f;
+      --dorado: #0269cb;
+      --arena: #fffefe;
+      --blanco: #fffefe;
+      --sombra: 0 8px 24px rgba(3, 59, 159, 0.16);
       --radio: 18px;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
     body { background: var(--arena); color: #333; display: flex; flex-direction: column; min-height: 100vh; }
 
     /* HEADER */
@@ -41,7 +42,9 @@
       z-index: 1001;
     }
     .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .logo-txt { font-size: 1.6rem; color: var(--cedro); font-weight: 800; letter-spacing: 2px; }
+    .logo-txt { font-family: 'Montserrat', sans-serif; font-size: 1.25rem; color: var(--cedro); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; line-height: 1; }
+    .logo-txt-accent { color: var(--dorado); }
+    .logo-box .admin-logo-icon { flex-shrink: 0; object-fit: contain; }
     .nav-right { display: flex; align-items: center; gap: 18px; }
     .nav-right a { text-decoration: none; color: var(--cedro); font-weight: 700; font-size: 0.95rem; transition: 0.3s; }
     .nav-right a:hover { color: var(--dorado); }
@@ -83,12 +86,12 @@
     .sidebar ul li a {
       display: flex; align-items: center; gap: 0.75rem;
       padding: 0.9rem 1.5rem;
-      color: rgba(255,255,255,0.85);
+      color: rgba(255,255,255,0.88);
       text-decoration: none; font-weight: 700; font-size: 0.95rem;
       transition: background 0.2s, color 0.2s;
       border-left: 3px solid transparent;
     }
-    .sidebar ul li a:hover { background: rgba(197,160,89,0.2); color: var(--dorado); border-left-color: var(--dorado); }
+    .sidebar ul li a:hover { background: rgba(153,222,252,0.2); color: var(--blanco); border-left-color: var(--blanco); }
     .sidebar .nav-icon {
       width: 1rem;
       height: 1rem;
@@ -107,7 +110,7 @@
 
     /* MAIN */
     main { flex: 1; padding: 2.5rem 5%; }
-    footer { background: var(--cedro); color: white; text-align: center; padding: 28px 20px; margin-top: auto; }
+    footer { background: var(--cedro); color: var(--blanco); text-align: center; padding: 28px 20px; margin-top: auto; }
 
     @media(max-width: 768px) {
       .header { flex-wrap: wrap; gap: 10px; }
@@ -124,12 +127,13 @@
       <div class="hmb dgn pt-2"></div>
     </label>
     <a href="index.php?page={{PRIVATE_DEFAULT_CONTROLLER}}" class="logo-box">
-      <span class="logo-txt">CÉDRIKA</span>
+      <img src="{{~BASE_DIR}}/public/img/logo.png" alt="" width="36" height="36" class="admin-logo-icon" />
+      <span class="logo-txt">Smart<span class="logo-txt-accent">Clinic</span></span>
     </a>
     <div class="nav-right">
       {{with login}}
       <a href="index.php?page=Security_Perfil" class="username-label profile-link"><svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z"/></svg> Hola, {{userName}}</a>
-      <a href="index.php?page=sec_logout"><svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17v-3H3v-4h7V7l5 5-5 5zm3 4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8v2H5v14h8v2zm8-9h-7v-2h7V7l4 5-4 5v-3z"/></svg> Salir</a>
+      <a href="index.php?page=Sec_Logout"><svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17v-3H3v-4h7V7l5 5-5 5zm3 4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8v2H5v14h8v2zm8-9h-7v-2h7V7l4 5-4 5v-3z"/></svg> Salir</a>
       {{endwith login}}
     </div>
   </header>
@@ -150,7 +154,7 @@
   </main>
 
   <footer>
-    <p>© {{~CURRENT_YEAR}} CÉDRIKA | La Ceiba, Honduras</p>
+    <p>© {{~CURRENT_YEAR}} SmartClinic | Gestión de citas médicas</p>
   </footer>
 
 {{foreach EndScripts}}

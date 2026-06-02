@@ -6,6 +6,7 @@ use Controllers\PrivateController;
 use Views\Renderer;
 use Dao\Security\Funciones as DaoFunciones;
 use Utilities\Site;
+use Utilities\Paging;
 
 // Listado y filtros de funciones/permiso
 class Funciones extends PrivateController
@@ -24,7 +25,8 @@ class Funciones extends PrivateController
             $type = $_GET["type"] ?? "";
             $orderBy = $this->getOrderBy();
             $orderDescending = $this->getOrderDescending();
-            $page = intval($_GET["page"] ?? 0);
+            $pageNum = max(1, intval($_GET["pageNum"] ?? 1));
+            $page = $pageNum - 1;
             $itemsPerPage = 10;
 
             $result = DaoFunciones::getFunciones(
@@ -57,10 +59,12 @@ class Funciones extends PrivateController
 
             $this->setOrderVariables();
 
-            $this->viewData["pagination"] = $this->getPaginationHtml(
-                $result["page"],
-                ceil($result["total"] / $itemsPerPage),
-                "index.php?page=Security_Funciones&partialName=" . urlencode($partialName) . "&status=" . urlencode($status) . "&type=" . urlencode($type)
+            $this->viewData["pagination"] = Paging::getPagination(
+                $result["total"],
+                $itemsPerPage,
+                $pageNum,
+                "index.php?page=Security_Funciones&partialName=" . urlencode($partialName) . "&status=" . urlencode($status) . "&type=" . urlencode($type),
+                "Security_Funciones"
             );
 
             Renderer::render("security/funciones", $this->viewData);
@@ -111,21 +115,4 @@ class Funciones extends PrivateController
         $this->viewData["OrderByFntypDesc"] = $orderBy === "fntyp" && $desc;
     }
 
-    // =============================
-    // GETPAGINATIONHTML
-    // =============================
-    private function getPaginationHtml(int $currentPage, int $totalPages, string $baseUrl): string
-    {
-        if ($totalPages <= 1) return "";
-
-        // Genera HTML simple de navegaciaIn por paginas
-        $html = '<div class="pagination">';
-        for ($i = 0; $i < $totalPages; $i++) {
-            $active = $i === $currentPage ? 'class="active"' : '';
-            $url = $baseUrl . "&page=" . $i;
-            $html .= "<a $active href=\"$url\">" . ($i + 1) . "</a> ";
-        }
-        $html .= '</div>';
-        return $html;
-    }
 }

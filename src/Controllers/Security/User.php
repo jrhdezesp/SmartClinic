@@ -247,135 +247,49 @@ class User extends PrivateController
         }
     }
 
-    /**
-     * Genera el HTML completo de un <input> como string listo para la vista
-     * Asi evitamos poner atributos dinamicos dentro del HTML del template,
-     * que el renderer no soporta correctamente
-     */
-    // =============================
-    // BUILDINPUT
-    // =============================
-    private function buildInput(
-        string $type,
-        string $name,
-        string $value,
-        bool $readonly = false,
-        string $autocomplete = "off"
-    ): string {
-        $ro = $readonly ? ' readonly' : '';
-        $val = htmlspecialchars($value, ENT_QUOTES);
-        return '<input type="' . $type . '" name="' . $name . '" value="' . $val . '"'
-            . $ro . ' autocomplete="' . $autocomplete . '"'
-            . ' class="form-input">';
-    }
-
-    /**
-     * Genera el HTML completo de un <select> como string listo para la vista
-     */
-    // =============================
-    // BUILDSELECT
-    // =============================
-    private function buildSelect(
-        string $name,
-        array $options,
-        string $selected,
-        bool $disabled = false
-    ): string {
-        $dis = $disabled ? ' disabled' : '';
-        $html = '<select name="' . $name . '" class="form-select"' . $dis . '>';
-        foreach ($options as $val => $label) {
-            $sel = ($selected === $val) ? ' selected' : '';
-            $html .= '<option value="' . $val . '"' . $sel . '>'
-                . htmlspecialchars($label) . '</option>';
-        }
-        $html .= '</select>';
-        return $html;
-    }
-
     // =============================
     // SETVIEWDATA
     // =============================
     private function setViewData(): void
     {
-        // Arma componentes dinamicos para el template
         $this->viewData["FormTitle"] = sprintf(
             $this->modeDescriptions[$this->mode],
             $this->user["username"] ?? ""
         );
         $this->viewData["mode"] = $this->mode;
 
-        $isSelf = $this->isEditingSelf() && $this->mode === "UPD";
-        $isReadonly = ($this->mode === "DEL" || $this->mode === "DSP");
+        $isSelf       = $this->isEditingSelf() && $this->mode === "UPD";
+        $isReadonly   = ($this->mode === "DEL" || $this->mode === "DSP");
         $selectsLocked = ($this->mode === "DEL" || $this->mode === "DSP" || $isSelf);
 
-        //  Campo Nombre 
-        $this->viewData["fieldNombre"] = $this->buildInput(
-            "text",
-            "username",
-            $this->user["username"] ?? "",
-            $isReadonly
-        );
-        $this->viewData["errorNombre"] = $this->user["username_error"] ?? "";
+        // Valores de los campos
+        $this->viewData["val_username"]  = htmlspecialchars($this->user["username"] ?? "", ENT_QUOTES);
+        $this->viewData["val_useremail"] = htmlspecialchars($this->user["useremail"] ?? "", ENT_QUOTES);
+        $this->viewData["val_userest"]   = $this->user["userest"] ?? "ACT";
+        $this->viewData["val_usertipo"]  = $this->user["usertipo"] ?? "NOR";
 
-        //  Campo Email 
-        // Solo editable en INS; readonly en UPD, DEL y DSP
-        $emailReadonly = ($this->mode !== "INS");
-        $this->viewData["fieldEmail"] = $this->buildInput(
-            "email",
-            "useremail",
-            $this->user["useremail"] ?? "",
-            $emailReadonly
-        );
-        $this->viewData["errorEmail"] = $this->user["useremail_error"] ?? "";
+        // Flags de estado para la vista
+        $this->viewData["field_readonly"]      = $isReadonly;
+        $this->viewData["email_readonly"]      = ($this->mode !== "INS");
+        $this->viewData["selects_locked"]      = $selectsLocked;
+        $this->viewData["is_insert"]           = ($this->mode === "INS");
+        $this->viewData["is_delete"]           = ($this->mode === "DEL");
+        $this->viewData["show_commit"]         = ($this->mode !== "DSP");
+        $this->viewData["warn_self"]           = $isSelf;
 
-        //  Campo Password (solo en INS) 
-        $this->viewData["is_insert"] = $this->mode === "INS";
-        $this->viewData["fieldPswd"] = $this->buildInput(
-            "password",
-            "userpswd",
-            "",
-            false,
-            "new-password"
-        );
-        $this->viewData["errorPswd"] = $this->user["userpswd_error"] ?? "";
+        // Flags de opciones seleccionadas en selects
+        $this->viewData["est_ACT"] = ($this->user["userest"] ?? "ACT") === "ACT";
+        $this->viewData["est_INA"] = ($this->user["userest"] ?? "ACT") === "INA";
+        $this->viewData["tipo_NOR"] = ($this->user["usertipo"] ?? "NOR") === "NOR";
+        $this->viewData["tipo_ADM"] = ($this->user["usertipo"] ?? "NOR") === "ADM";
+        $this->viewData["tipo_CON"] = ($this->user["usertipo"] ?? "NOR") === "CON";
 
-        //Select Estado 
-        $this->viewData["fieldEstado"] = $this->buildSelect(
-            "userest",
-            ["ACT" => "Activo", "INA" => "Inactivo"],
-            $this->user["userest"] ?? "ACT",
-            $selectsLocked
-        );
-        $this->viewData["errorEstado"] = $this->user["userest_error"] ?? "";
-        $this->viewData["warningEstado"] = $isSelf
-            ? '<div class="self-note">&#9888; No puedes cambiar tu propio estado</div>'
-            : "";
-
-        // Select Tipo 
-        $this->viewData["fieldTipo"] = $this->buildSelect(
-            "usertipo",
-            ["NOR" => "Normal", "ADM" => "Administrador", "CON" => "Consultor"],
-            $this->user["usertipo"] ?? "NOR",
-            $selectsLocked
-        );
-        $this->viewData["errorTipo"] = $this->user["usertipo_error"] ?? "";
-        $this->viewData["warningTipo"] = $isSelf
-            ? '<div class="self-note">&#9888; No puedes cambiar tu propio tipo</div>'
-            : "";
-
-        // Boton de accion 
-        // DSP  -> sin boton
-        // INS/UPD -> boton dorado "Guardar"
-        // DEL  -> boton rojo "Eliminar"
-        if ($this->mode === "DSP") {
-            $this->viewData["commitBtn"] = "";
-        } elseif ($this->mode === "DEL") {
-            $this->viewData["commitBtn"] =
-                '<button type="submit" class="btn-eliminar-confirm">Eliminar</button>';
-        } else {
-            $this->viewData["commitBtn"] =
-                '<button type="submit" class="btn-confirmar">Guardar</button>';
-        }
+        // Mensajes de error
+        $this->viewData["errorNombre"]  = $this->user["username_error"] ?? "";
+        $this->viewData["errorEmail"]   = $this->user["useremail_error"] ?? "";
+        $this->viewData["errorPswd"]    = $this->user["userpswd_error"] ?? "";
+        $this->viewData["errorEstado"]  = $this->user["userest_error"] ?? "";
+        $this->viewData["errorTipo"]    = $this->user["usertipo_error"] ?? "";
 
         // usercod para la action del form
         $this->viewData["u_usercod"] = $this->user["usercod"] ?? 0;

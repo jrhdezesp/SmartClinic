@@ -5,148 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{SITE_TITLE}}</title>
-  <style>
-    :root {
-      --cedro: #105A73;
-      --dorado: #67C7B1;
-      --arena: #EDF7FB;
-      --blanco: #ffffff;
-      --gris: #4A6170;
-      --sombra: 0 8px 24px rgba(16, 90, 115, 0.16);
-      --radio: 18px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    body {
-      background: var(--arena);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    .header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-      padding: 18px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: var(--sombra);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    .header * {
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    .logo-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-
-    .logo-img {
-      width: 52px;
-      height: 52px;
-      object-fit: contain;
-    }
-
-    .logo-txt {
-      font-size: 1.7rem;
-      color: var(--cedro);
-      font-weight: 800;
-      letter-spacing: 2px;
-    }
-
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav-menu a {
-      text-decoration: none;
-      color: var(--cedro);
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: 0.3s;
-      white-space: nowrap;
-    }
-
-    .nav-menu a:hover {
-      color: var(--dorado);
-    }
-
-    .badge {
-      background: #1190a8;
-      color: white;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      margin-left: 6px;
-    }
-
-    /* Sobrescribir estilos globales conflictivos de appstyle.css */
-    header nav {
-      position: static !important;
-      transform: none !important;
-      width: auto !important;
-      margin-top: 0 !important;
-      bottom: auto !important;
-      height: auto !important;
-      background: transparent !important;
-      box-shadow: none !important;
-    }
-
-    .menu_toggle_icon, .hmb, header input[type="checkbox"] {
-      display: none !important;
-    }
-
-    main {
-      flex: 1;
-      padding: 40px 20px;
-    }
-
-    body > footer {
-      background: var(--cedro) !important;
-      color: #ffffff !important;
-      text-align: center;
-      padding: 35px 20px;
-      margin-top: 40px;
-      display: block;
-    }
-
-    body > footer p {
-      color: #ffffff !important;
-      margin: 0;
-    }
-
-    @media(max-width: 768px) {
-      .header {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .nav-menu {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-    }
-  </style>
-  <link rel="stylesheet" href="public/css/appstyle.css" />
+  <link rel="stylesheet" href="{{~BASE_DIR}}/public/css/main.css" />
   {{if FONT_AWESOME_KIT}}
   <script src="https://kit.fontawesome.com/{{FONT_AWESOME_KIT}}.js" crossorigin="anonymous"></script>
   {{endif FONT_AWESOME_KIT}}
@@ -159,32 +18,102 @@
 </head>
 
 <body>
-  <header class="header">
-    <a href="index.php" class="logo-box">
-      <img src="img/logo-cedrika.png" alt="logo SmartClinic" class="logo-img">
-      <span class="logo-txt">SmartClinic</span>
-    </a>
+  <nav id="sc-navbar"{{if navDark}} class="nav-dark"{{endif navDark}}>
+    <div class="container nav-inner">
+      <a href="index.php?page=Landing" class="nav-logo">
+        <img src="{{~BASE_DIR}}/public/img/logo.png" alt="" width="32" height="32" />
+        <span class="nav-logo-name">Smart<span class="nav-logo-accent">Clinic</span></span>
+      </a>
 
-    <nav class="nav-menu">
-      <a href="index.php">Inicio</a>
-      <a href="index.php?page=Checkout_Catalogo">Servicios</a>
-      <a href="index.php?page=Checkout_Checkout">🩺 Citas {{foreach CartCount}}<span class="badge">{{this}}</span>{{endfor CartCount}}</a>
+      <ul class="nav-links">
+        <li><a href="index.php?page=Landing"{{if nav_Landing}} class="active"{{endif nav_Landing}}>Inicio</a></li>
+        <li><a href="index.php?page=Nosotros"{{if nav_Nosotros}} class="active"{{endif nav_Nosotros}}>Nosotros</a></li>
+        <li><a href="index.php?page=Servicios"{{if nav_Servicios}} class="active"{{endif nav_Servicios}}>Servicios</a></li>
+        <li><a href="index.php?page=Contacto"{{if nav_Contacto}} class="active"{{endif nav_Contacto}}>Contacto</a></li>
+      </ul>
+
       {{if login}}
-      <a href="index.php?page=Security_Perfil" style="color: var(--cedro); font-weight:700; text-decoration:none;">Hola, {{userName}}</a>
-      <a href="index.php?page=Sec_Logout">Cerrar Sesión</a>
+      <a href="index.php?page=Home" class="nav-cta">Panel</a>
       {{else}}
-      <a href="index.php?page=Sec_Login"><i class="fas fa-sign-in-alt"></i>&nbsp;Iniciar Sesión</a>
-      <a href="index.php?page=Sec_Register"><i class="fas fa-sign-in-alt"></i>&nbsp;Crear Cuenta</a>
+      <a href="index.php?page=Sec_Login" class="nav-cta">Iniciar sesión</a>
       {{endif login}}
-    </nav>
-  </header>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nav-mobile" id="navMobile">
+      <ul>
+        <li><a href="index.php?page=Landing">Inicio</a></li>
+        <li><a href="index.php?page=Nosotros">Nosotros</a></li>
+        <li><a href="index.php?page=Servicios">Servicios</a></li>
+        <li><a href="index.php?page=Contacto">Contacto</a></li>
+        {{if login}}
+        <li><a href="index.php?page=Home" class="nav-cta">Panel</a></li>
+        {{else}}
+        <li><a href="index.php?page=Sec_Login" class="nav-cta">Iniciar sesión</a></li>
+        {{endif login}}
+      </ul>
+    </div>
+  </nav>
 
   <main>
     {{{page_content}}}
   </main>
 
-  <footer>
-    <p>© {{~CURRENT_YEAR}} SmartClinic | Salud y Bienestar</p>
+  <footer id="sc-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.php?page=Landing" class="nav-logo footer-brand-logo">
+            <img src="{{~BASE_DIR}}/public/img/logo.png" alt="" width="32" height="32" />
+            <span class="nav-logo-name">Smart<span class="nav-logo-accent">Clinic</span></span>
+          </a>
+          <p>Sistema de gestión de citas médicas para centros de salud modernos en Honduras.</p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Navegación</h5>
+          <ul>
+            <li><a href="index.php?page=Landing">Inicio</a></li>
+            <li><a href="index.php?page=Nosotros">Nosotros</a></li>
+            <li><a href="index.php?page=Servicios">Servicios</a></li>
+            <li><a href="index.php?page=Contacto">Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Sistema</h5>
+          <ul>
+            {{if login}}
+            <li><a href="index.php?page=Home">Panel admin</a></li>
+            <li><a href="index.php?page=Security_Perfil">Mi perfil</a></li>
+            <li><a href="index.php?page=Sec_Logout">Cerrar sesión</a></li>
+            {{else}}
+            <li><a href="index.php?page=Sec_Login">Iniciar sesión</a></li>
+            <li><a href="index.php?page=Sec_Register">Crear cuenta</a></li>
+            {{endif login}}
+            <li><a href="index.php?page=Contacto">Soporte</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Contacto</h5>
+          <ul>
+            <li><a href="mailto:grupo3.smartclinic@unicah.edu.hn">grupo3.smartclinic@unicah.edu.hn</a></li>
+            <li><a href="tel:+50422345678">+504 2234-5678</a></li>
+            <li><span>Tegucigalpa, Honduras</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; {{~CURRENT_YEAR}} SmartClinic — IF361-1801 · Seminario-Taller de Software · UNICAH</span>
+        <span>Grupo 3</span>
+      </div>
+    </div>
+  </footer>
 
   {{foreach EndScripts}}
   <script src="{{~BASE_DIR}}/{{this}}"></script>

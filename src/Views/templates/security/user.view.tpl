@@ -26,40 +26,79 @@
 
     <div class="form-field">
       <label>Nombre</label>
-      {{fieldNombre}}
+      {{if field_readonly}}
+      <input type="text" name="username" value="{{val_username}}" readonly autocomplete="off" class="form-input">
+      {{endif field_readonly}}
+      {{ifnot field_readonly}}
+      <input type="text" name="username" value="{{val_username}}" autocomplete="off" class="form-input">
+      {{endifnot field_readonly}}
       {{if errorNombre}}<div class="error">{{errorNombre}}</div>{{endif errorNombre}}
     </div>
 
     <div class="form-field">
       <label>Email</label>
-      {{fieldEmail}}
+      {{if email_readonly}}
+      <input type="email" name="useremail" value="{{val_useremail}}" readonly autocomplete="off" class="form-input">
+      {{endif email_readonly}}
+      {{ifnot email_readonly}}
+      <input type="email" name="useremail" value="{{val_useremail}}" autocomplete="off" class="form-input">
+      {{endifnot email_readonly}}
       {{if errorEmail}}<div class="error">{{errorEmail}}</div>{{endif errorEmail}}
     </div>
 
     {{if is_insert}}
     <div class="form-field">
       <label>Password</label>
-      {{fieldPswd}}
+      <input type="password" name="userpswd" value="" autocomplete="new-password" class="form-input">
       {{if errorPswd}}<div class="error">{{errorPswd}}</div>{{endif errorPswd}}
     </div>
     {{endif is_insert}}
 
     <div class="form-field">
       <label>Estado</label>
-      {{fieldEstado}}
+      {{if selects_locked}}
+      <select name="userest" class="form-select" disabled>
+      {{endif selects_locked}}
+      {{ifnot selects_locked}}
+      <select name="userest" class="form-select">
+      {{endifnot selects_locked}}
+        {{if est_ACT}}<option value="ACT" selected>Activo</option>{{endif est_ACT}}
+        {{ifnot est_ACT}}<option value="ACT">Activo</option>{{endifnot est_ACT}}
+        {{if est_INA}}<option value="INA" selected>Inactivo</option>{{endif est_INA}}
+        {{ifnot est_INA}}<option value="INA">Inactivo</option>{{endifnot est_INA}}
+      </select>
       {{if errorEstado}}<div class="error">{{errorEstado}}</div>{{endif errorEstado}}
-      {{warningEstado}}
+      {{if warn_self}}<div class="self-note">&#9888; No puedes cambiar tu propio estado</div>{{endif warn_self}}
     </div>
 
     <div class="form-field">
       <label>Tipo</label>
-      {{fieldTipo}}
+      {{if selects_locked}}
+      <select name="usertipo" class="form-select" disabled>
+      {{endif selects_locked}}
+      {{ifnot selects_locked}}
+      <select name="usertipo" class="form-select">
+      {{endifnot selects_locked}}
+        {{if tipo_NOR}}<option value="NOR" selected>Normal</option>{{endif tipo_NOR}}
+        {{ifnot tipo_NOR}}<option value="NOR">Normal</option>{{endifnot tipo_NOR}}
+        {{if tipo_ADM}}<option value="ADM" selected>Administrador</option>{{endif tipo_ADM}}
+        {{ifnot tipo_ADM}}<option value="ADM">Administrador</option>{{endifnot tipo_ADM}}
+        {{if tipo_CON}}<option value="CON" selected>Consultor</option>{{endif tipo_CON}}
+        {{ifnot tipo_CON}}<option value="CON">Consultor</option>{{endifnot tipo_CON}}
+      </select>
       {{if errorTipo}}<div class="error">{{errorTipo}}</div>{{endif errorTipo}}
-      {{warningTipo}}
+      {{if warn_self}}<div class="self-note">&#9888; No puedes cambiar tu propio tipo</div>{{endif warn_self}}
     </div>
 
     <div class="form-actions">
-      {{commitBtn}}
+      {{if show_commit}}
+        {{if is_delete}}
+        <button type="submit" class="btn-eliminar-confirm">Eliminar</button>
+        {{endif is_delete}}
+        {{ifnot is_delete}}
+        <button type="submit" class="btn-confirmar">Guardar</button>
+        {{endifnot is_delete}}
+      {{endif show_commit}}
       <a href="index.php?page=Security_Users" class="btn-cancelar">Cancelar</a>
     </div>
 

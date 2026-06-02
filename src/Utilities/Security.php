@@ -23,6 +23,18 @@ class Security
     }
 
     // =============================
+    // UPDATEUSERNAME
+    // =============================
+    public static function updateUserName(int $userId, string $newName): void
+    {
+        DaoSecurity::updateUsuarioNombre($userId, $newName);
+        if (isset($_SESSION['login'])) {
+            $_SESSION['login']['userName'] = $newName;
+        }
+        $_SESSION['userName'] = $newName;
+    }
+
+    // =============================
     // LOGOUT
     // =============================
     public static function logout()

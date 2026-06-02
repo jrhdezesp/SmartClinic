@@ -16,6 +16,7 @@ class Register extends PublicController
     private $hasErrors = false;
     public function run() :void
     {
+        \Utilities\Context::setContext('layoutFile', 'authlayout');
 
         if ($this->isPostBack()) {
             $this->txtEmail = $_POST["txtEmail"];
@@ -38,7 +39,7 @@ class Register extends PublicController
                         $this->hasErrors = true;
                     } else {
                         if (\Dao\Security\Security::newUsuario($this->txtEmail, $this->txtPswd)) {
-                            \Utilities\Site::redirectToWithMsg("index.php?page=sec_login", "¡Usuario Registrado Satisfactoriamente!");
+                            \Utilities\Site::redirectToWithMsg("index.php?page=Sec_Login", "¡Usuario Registrado Satisfactoriamente!");
                             return;
                         }
                         $this->generalError = "No fue posible registrar el usuario en este momento";

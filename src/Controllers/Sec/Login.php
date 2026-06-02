@@ -11,6 +11,8 @@ class Login extends \Controllers\PublicController
 
     public function run(): void
     {
+        \Utilities\Context::setContext('layoutFile', 'authlayout');
+
         if ($this->isPostBack()) {
             $this->txtEmail = trim($_POST["txtEmail"] ?? "");
             $this->txtPswd = trim($_POST["txtPswd"] ?? "");
@@ -66,7 +68,7 @@ class Login extends \Controllers\PublicController
                             );
                         } else {
                             if (\Utilities\Security::isInRol($dbUser["usercod"], 1)) {
-                                \Utilities\Site::redirectTo("index.php?page=HomeController");
+                                \Utilities\Site::redirectTo("index.php?page=Home");
                             } else {
                                 \Utilities\Site::redirectTo("index.php");
                             }

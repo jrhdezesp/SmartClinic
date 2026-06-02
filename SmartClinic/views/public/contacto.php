@@ -8,8 +8,8 @@ $navDark = false;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contacto — SmartClinic</title>
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="stylesheet" href="/assets/css/contacto.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/contacto.css">
 </head>
 <body>
 
@@ -68,7 +68,7 @@ $navDark = false;
           <div class="info-icon">🐙</div>
           <div class="info-text">
             <h4>Repositorio GitHub</h4>
-            <p><a href="https://github.com" style="color:var(--sc-blue-700);font-weight:500;">github.com/grupo3/smartclinic</a></p>
+            <p><a href="https://github.com/jrhdezesp/SmartClinic/tree/main/SmartClinic" style="color:var(--sc-blue-700);font-weight:500;">SmartClinic/SmartClinic at main · jrhdezesp/SmartClinic</a></p>
           </div>
         </div>
 

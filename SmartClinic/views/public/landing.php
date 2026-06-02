@@ -8,15 +8,14 @@ $navDark = true;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SmartClinic — Sistema de Gestión de Citas Médicas</title>
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="stylesheet" href="/assets/css/landing.css">
+  <link rel="stylesheet" href="../../assets/css/landing.css">
+  <link rel="stylesheet" href="../../assets/css/main.css">
 </head>
 <body>
-
 <?php include __DIR__ . '/../partials/navbar.php'; ?>
 
 <!-- ════════════════════════════════════════
-     HERO
+    HERO
 ════════════════════════════════════════ -->
 <section class="hero" id="inicio">
   <div class="hero-bg-dots"></div>

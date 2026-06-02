@@ -1,21 +1,31 @@
 {
   "public": [
     {
-      "id": "Menu_SignIn",
-      "nav_url": "index.php?page=Sec_Login",
-      "nav_label":"<i class=\"fas fa-sign-in-alt\"></i>&nbsp;Iniciar Sesión"
+      "id": "Menu_Landing",
+      "nav_url": "index.php?page=Landing",
+      "nav_label": "Inicio"
     },
     {
-      "id": "Menu_SignUp",
-      "nav_url": "index.php?page=Sec_Register",
-      "nav_label":"<i class=\"fas fa-sign-in-alt\"></i>&nbsp;Crear Cuenta"
+      "id": "Menu_Nosotros",
+      "nav_url": "index.php?page=Nosotros",
+      "nav_label": "Nosotros"
+    },
+    {
+      "id": "Menu_Servicios",
+      "nav_url": "index.php?page=Servicios",
+      "nav_label": "Servicios"
+    },
+    {
+      "id": "Menu_Contacto",
+      "nav_url": "index.php?page=Contacto",
+      "nav_label": "Contacto"
     }
   ],
   "private": [
     {
-      "id": "Menu_Products",
-      "nav_url": "index.php?page=Products_Products",
-      "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M21 8.5l-9-5-9 5 9 5 9-5zm0 2.3l-9 5-9-5v8.2l9 5 9-5v-8.2z'/></svg></span>&nbsp;Productos"
+      "id": "Menu_Dashboard",
+      "nav_url": "index.php?page=Home",
+      "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M12 3l9 8h-3v10h-5v-6H11v6H6V11H3l9-8z'/></svg></span>&nbsp;Panel"
     },
     {
       "id": "Menu_Users",
@@ -23,14 +33,19 @@
       "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm-8 1a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm8 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zM5 14c-2.21 0-5 1.11-5 3.5V20h5v-1.5c0-1.08.33-2.07.91-2.94C5.58 15.05 5.29 14.51 5 14z'/></svg></span>&nbsp;Usuarios"
     },
     {
-      "id": "Menu_Transactions",
-      "nav_url": "index.php?page=Commerce_Transacciones",
-      "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M4 4h16v16H4V4zm3 3v2h10V7H7zm0 4v2h10v-2H7zm0 4v2h7v-2H7z'/></svg></span>&nbsp;Transacciones clientes"
+      "id": "Menu_Roles",
+      "nav_url": "index.php?page=Security_Roles",
+      "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M12 2l3 6 6 .9-4.4 4.3 1 6.3L12 16l-5.6 3.5 1-6.3L3 8.9 9 8l3-6z'/></svg></span>&nbsp;Roles"
     },
     {
-      "id": "Menu_Purchases",
-      "nav_url": "index.php?page=Commerce_Compras",
-      "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M7 4h10l1 4h2a1 1 0 0 1 1 1v1H2V9a1 1 0 0 1 1-1h2l2-4zm-2 7l1 8h12l1-8H5zm4 2h2v4H9v-4zm4 0h2v4h-2v-4z'/></svg></span>&nbsp;Ventas"
+      "id": "Menu_Functions",
+      "nav_url": "index.php?page=Security_Funciones",
+      "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M12 2a2 2 0 0 0-2 2v1.1c-.6.2-1.2.4-1.7.7L7.5 5.9a2 2 0 0 0-2.8 2.8l.9.8c-.3.5-.5 1.1-.7 1.7H4a2 2 0 0 0 0 4h1c.2.6.4 1.2.7 1.7l-.9.8a2 2 0 0 0 2.8 2.8l.8-.9c.5.3 1.1.5 1.7.7V20a2 2 0 0 0 4 0v-1c.6-.2 1.2-.4 1.7-.7l.8.9a2 2 0 0 0 2.8-2.8l-.9-.8c.3-.5.5-1.1.7-1.7h1a2 2 0 0 0 0-4h-1.1c-.2-.6-.4-1.2-.7-1.7l.9-.8a2 2 0 0 0-2.8-2.8l-.8.9c-.5-.3-1.1-.5-1.7-.7V4a2 2 0 0 0-2-2zm0 6a4 4 0 1 1 0 8 4 4 0 0 1 0-8z'/></svg></span>&nbsp;Funciones"
+    },
+    {
+      "id": "Menu_Profile",
+      "nav_url": "index.php?page=Security_Perfil",
+      "nav_label": "<span class='nav-icon' aria-hidden='true'><svg viewBox='0 0 24 24' role='img'><path d='M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z'/></svg></span>&nbsp;Perfil"
     }
   ]
 }

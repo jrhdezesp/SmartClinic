@@ -30,6 +30,12 @@ abstract class PublicController implements IController
     {
         $this->name = get_class($this);
         \Utilities\Nav::setPublicNavContext();
+        \Utilities\Site::addEndScript('public/js/main.js');
+
+        $currentPage = trim($_GET['page'] ?? 'Landing');
+        foreach (['Landing', 'Nosotros', 'Servicios', 'Contacto'] as $navPage) {
+            \Utilities\Context::setContext('nav_' . $navPage, $currentPage === $navPage);
+        }
         
         // Pasar variables de sesión de usuario al contexto para templates
         if (\Utilities\Security::isLogged()) {

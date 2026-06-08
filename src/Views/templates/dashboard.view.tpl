@@ -1,245 +1,316 @@
 <style>
-  .dash { max-width: 1100px; padding-bottom: 3rem; }
-
-  /* ── KPIs ── */
-  .kpi-row {
+  .dashboard-shell {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 2.5rem 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 1.5rem;
   }
-  .kpi-card {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 1.4rem 1.6rem;
-    box-shadow: 0 1px 4px rgba(3,59,159,.07);
+  .hero-card {
+    background: linear-gradient(135deg, #0b4bb8 0%, #0f6fe2 100%);
+    border-radius: 24px;
+    color: #fff;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    overflow: hidden;
   }
-  .kpi-label {
-    font-size: .75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: #64748b;
-    margin-bottom: .5rem;
-  }
-  .kpi-value {
+  .hero-card h1 {
     font-size: 2.4rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.03em;
+  }
+  .hero-card p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.92);
+    max-width: 620px;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1.35rem;
+  }
+  .hero-actions a {
+    background: rgba(255,255,255,0.17);
+    color: #fff;
+    padding: 0.85rem 1.2rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .hero-actions a:hover {
+    background: rgba(255,255,255,0.26);
+    transform: translateY(-2px);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 1.6rem;
+    box-shadow: 0 14px 35px rgba(3,59,159,0.08);
+  }
+  .stat-card .label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .stat-card .value {
+    font-size: 2.5rem;
     font-weight: 800;
-    color: #033b9f;
+    color: #0b4bb8;
     line-height: 1;
   }
-  .kpi-sub {
-    font-size: .8rem;
-    color: #94a3b8;
-    margin-top: .35rem;
+  .stat-card .hint {
+    margin-top: 0.75rem;
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
-
-  /* ── Grid 2 col ── */
-  .dash-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     gap: 1rem;
     margin-bottom: 1rem;
   }
-
-  /* ── Panel ── */
-  .panel {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(3,59,159,.07);
+  .section-head h2 {
+    font-size: 1.45rem;
+    color: #0f172a;
   }
-  .panel-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: .9rem 1.3rem;
-    border-bottom: 1px solid #f1f5f9;
-  }
-  .panel-title {
-    font-size: .9rem;
-    font-weight: 700;
-    color: #033b9f;
-  }
-  .panel-link {
-    font-size: .78rem;
-    color: #2979f5;
+  .section-head a {
     text-decoration: none;
-    font-weight: 600;
-  }
-  .panel-link:hover { text-decoration: underline; }
-
-  /* ── Médicos ── */
-  .medico-row {
-    display: flex;
-    align-items: center;
-    gap: .85rem;
-    padding: .75rem 1.3rem;
-    border-bottom: 1px solid #f1f5f9;
-  }
-  .medico-row:last-child { border-bottom: none; }
-  .medico-avatar {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: #e8f0fe;
-    color: #033b9f;
-    font-size: .72rem;
+    color: #0b4bb8;
     font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
   }
-  .medico-name { font-size: .85rem; font-weight: 600; color: #1e293b; }
-  .medico-esp  { font-size: .75rem; color: #94a3b8; margin-top: .1rem; }
-
-  /* ── Pacientes recientes ── */
-  .pac-table { width: 100%; border-collapse: collapse; }
-  .pac-table th {
-    font-size: .7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: #64748b;
-    padding: .6rem 1.3rem;
-    text-align: left;
-    background: #f8fafc;
-    border-bottom: 1px solid #f1f5f9;
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 1rem;
   }
-  .pac-table td {
-    padding: .75rem 1.3rem;
-    font-size: .85rem;
+  .card-panel {
+    background: #fff;
+    border-radius: 22px;
+    padding: 1.4rem;
+    box-shadow: 0 12px 30px rgba(3,59,159,0.06);
+  }
+  .card-panel h3 {
+    font-size: 1rem;
+    margin-bottom: 0.9rem;
+    color: #0b4bb8;
+  }
+  .card-panel p {
     color: #475569;
-    border-bottom: 1px solid #f1f5f9;
+    line-height: 1.75;
+    margin-bottom: 1.2rem;
   }
-  .pac-table tr:last-child td { border-bottom: none; }
-  .pac-table tr:hover td { background: #f8fafc; }
-  .pac-name { font-weight: 600; color: #1e293b; }
-
-  /* ── Acciones ── */
-  .dash-actions {
+  .action-buttons {
     display: flex;
-    gap: .75rem;
-    margin-bottom: 1.75rem;
     flex-wrap: wrap;
+    gap: 0.85rem;
   }
-  .btn-dash {
-    padding: .5rem 1rem;
-    border-radius: 9px;
-    font-size: .83rem;
-    font-weight: 600;
+  .btn-action {
+    border-radius: 999px;
+    padding: 0.95rem 1.25rem;
+    border: none;
     text-decoration: none;
-    border: 1px solid #e5e7eb;
-    color: #334155;
-    background: #fff;
-    transition: background .15s;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, opacity 0.2s ease;
   }
-  .btn-dash:hover { background: #f1f5f9; }
-  .btn-dash.primary {
-    background: #033b9f;
+  .btn-action.primary {
+    background: #0b4bb8;
     color: #fff;
-    border-color: #033b9f;
   }
-  .btn-dash.primary:hover { background: #0553c7; }
-
-  /* ── Empty ── */
-  .empty-msg { padding: 2rem; text-align: center; color: #94a3b8; font-size: .85rem; }
-
-  @media (max-width: 680px) {
-    .kpi-row  { grid-template-columns: 1fr 1fr; }
-    .dash-grid { grid-template-columns: 1fr; }
+  .btn-action.secondary {
+    background: #f8fafc;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+  }
+  .btn-action:hover {
+    transform: translateY(-1px);
+  }
+  .table-simple {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .table-simple th,
+  .table-simple td {
+    padding: 1rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .table-simple th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.08em;
+  }
+  .table-simple td {
+    color: #334155;
+    font-size: 0.95rem;
+  }
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #0b4bb8;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  @media (max-width: 980px) {
+    .hero-card {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    .stats-grid {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 
-<div class="dash">
-
-  <!-- Encabezado -->
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.75rem;">
+<div class="dashboard-shell">
+  <section class="hero-card">
     <div>
-      <h2 style="font-size:1.6rem; font-weight:800; color:#033b9f; letter-spacing:-.02em;">Panel de control</h2>
-      <p style="font-size:.85rem; color:#94a3b8; margin-top:.2rem;">{{fecha_hoy}} &nbsp;·&nbsp; Hola, {{userName}}</p>
+      <span class="badge-pill">Bienvenido</span>
+      <h1>Tu espacio de citas médicas</h1>
+      <p>Hola, {{userName}}. Aquí puedes ver los médicos disponibles, organizar tu próxima cita y acceder a tu información de paciente de forma rápida y ordenada.</p>
+      <div class="hero-actions">
+        <a href="index.php?page=MedicosController&action=index">Ver médicos disponibles</a>
+        <a href="index.php?page=CitasController&action=agendar">Agendar cita</a>
+        {{if canManagePacientes}}
+        <a href="index.php?page=PacientesController&action=index">Mis pacientes</a>
+        {{endif canManagePacientes}}
+        <a href="index.php?page=Security_Perfil">Mi perfil</a>
+      </div>
     </div>
-    <div class="dash-actions" style="margin:0;">
-      <a href="index.php?page=PacientesController&action=create" class="btn-dash primary">+ Paciente</a>
-      <a href="index.php?page=MedicosController&action=create"   class="btn-dash">+ Médico</a>
+    <div style="display:grid;place-items:center;">
+      <div style="width:100%;max-width:340px;background:rgba(255,255,255,0.12);border-radius:20px;padding:1.6rem;text-align:center;">
+        <div style="font-size:4rem;line-height:1;">👩‍⚕️</div>
+        <p style="margin-top:1rem;color:rgba(255,255,255,0.92);font-size:1rem;line-height:1.6;">Explora médicos disponibles o comienza a registrar tú próxima consulta.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="label">Pacientes registrados</span>
+      <div class="value">{{total_pacientes}}</div>
+      <div class="hint">Número de pacientes activos en el sistema.</div>
+    </div>
+    <div class="stat-card">
+      <span class="label">Médicos disponibles</span>
+      <div class="value">{{total_medicos}}</div>
+      <div class="hint">Profesionales listos para atender citas.</div>
+    </div>
+    <div class="stat-card">
+      <span class="label">Mis citas</span>
+      <div class="value"><a href="index.php?page=CitasController&action=index" style="color:#0b4bb8; text-decoration:none;">Ver agenda</a></div>
+      <div class="hint">Accede a tu historial de citas agendadas.</div>
     </div>
   </div>
 
-  <!-- KPIs -->
-  <div class="kpi-row">
-    <div class="kpi-card">
-      <div class="kpi-label">Pacientes</div>
-      <div class="kpi-value">{{total_pacientes}}</div>
-      <div class="kpi-sub">registrados en el sistema</div>
+  <div class="card-grid">
+    <div class="card-panel">
+      <div class="section-head">
+        <h2>Agenda una cita</h2>
+        <a href="index.php?page=MedicosController&action=index">Explorar médicos</a>
+      </div>
+      {{if canSchedule}}
+      <p>Elige un doctor de la lista de médicos disponibles y selecciona una fecha y hora que se adapte a tu calendario. El sistema verificará que el horario esté disponible.</p>
+      {{else}}
+      <p>Administra médicos, pacientes y citas con seguridad. Desde aquí puedes registrar nuevos pacientes y ver el historial de citas del sistema.</p>
+      {{endif canSchedule}}
+      <div class="action-buttons">
+        {{if canSchedule}}
+        <a href="index.php?page=CitasController&action=agendar" class="btn-action primary">Agendar cita</a>
+        {{endif canSchedule}}
+        {{if canManagePacientes}}
+        <a href="index.php?page=PacientesController&action=create" class="btn-action primary">Registrar paciente</a>
+        {{endif canManagePacientes}}
+        <a href="index.php?page=MedicosController&action=index" class="btn-action secondary">Ver médicos</a>
+      </div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Médicos</div>
-      <div class="kpi-value">{{total_medicos}}</div>
-      <div class="kpi-sub">en el directorio</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Citas hoy</div>
-      <div class="kpi-value" style="color:#f59e0b;">—</div>
-      <div class="kpi-sub">módulo próximamente</div>
-    </div>
-  </div>
 
-  <!-- Grid: médicos + pacientes recientes -->
-  <div class="dash-grid">
-
-    <!-- Médicos -->
-    <div class="panel">
-      <div class="panel-head">
-        <span class="panel-title">Médicos disponibles</span>
-        <a href="index.php?page=MedicosController" class="panel-link">Ver todos →</a>
+    <div class="card-panel">
+      <div class="section-head">
+        <h2>Últimos médicos</h2>
+        <a href="index.php?page=MedicosController&action=index">Todos los médicos</a>
       </div>
       {{if medicos}}
-        {{foreach medicos}}
-        <div class="medico-row">
-          <div class="medico-avatar">Dr</div>
-          <div>
-            <div class="medico-name">{{nombres}} {{apellidos}}</div>
-            <div class="medico-esp">{{nombre_especialidad}}</div>
-          </div>
-        </div>
-        {{endfor medicos}}
+      <table class="table-simple">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Especialidad</th>
+            <th>Teléfono</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{foreach medicos}}
+          <tr>
+            <td>{{nombres}} {{apellidos}}</td>
+            <td>{{nombre_especialidad}}</td>
+            <td>{{telefono}}</td>
+          </tr>
+          {{endfor medicos}}
+        </tbody>
+      </table>
       {{endif medicos}}
       {{ifnot medicos}}
-        <div class="empty-msg">No hay médicos registrados</div>
+      <p>No hay médicos registrados aún.</p>
       {{endifnot medicos}}
     </div>
-
-    <!-- Pacientes recientes -->
-    <div class="panel">
-      <div class="panel-head">
-        <span class="panel-title">Pacientes recientes</span>
-        <a href="index.php?page=PacientesController" class="panel-link">Ver todos →</a>
-      </div>
-      {{if pacientes}}
-        <table class="pac-table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Identidad</th>
-              <th>Teléfono</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{foreach pacientes}}
-            <tr>
-              <td><span class="pac-name">{{nombres}} {{apellidos}}</span></td>
-              <td>{{identidad}}</td>
-              <td>{{telefono}}</td>
-            </tr>
-            {{endfor pacientes}}
-          </tbody>
-        </table>
-      {{endif pacientes}}
-      {{ifnot pacientes}}
-        <div class="empty-msg">No hay pacientes registrados</div>
-      {{endifnot pacientes}}
-    </div>
-
   </div>
 
+  <section class="card-panel">
+    <div class="section-head">
+      <h2>Pacientes recientes</h2>
+      <a href="index.php?page=PacientesController&action=index">Ver todos</a>
+    </div>
+    {{if pacientes}}
+    <table class="table-simple">
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>Identidad</th>
+          <th>Teléfono</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{foreach pacientes}}
+        <tr>
+          <td>{{nombres}} {{apellidos}}</td>
+          <td>{{identidad}}</td>
+          <td>{{telefono}}</td>
+        </tr>
+        {{endfor pacientes}}
+      </tbody>
+    </table>
+    {{endif pacientes}}
+    {{ifnot pacientes}}
+    <p>No hay pacientes registrados aún.</p>
+    {{endifnot pacientes}}
+  </section>
 </div>

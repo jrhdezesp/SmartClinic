@@ -133,6 +133,11 @@ class Security
     // =============================
     public static function isAuthorized($userId, $function, $type = 'FNC'): bool
     {
+        // El administrador del sistema tiene acceso completo
+        if (self::isInRol($userId, 1)) {
+            return true;
+        }
+
         // Verifica si el usuario tiene permiso para funcion/controlador
         if (Context::getContextByKey('DEVELOPMENT') == '1') {
             $functionInDb = DaoSecurity::getFeature($function);

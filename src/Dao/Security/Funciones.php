@@ -20,31 +20,30 @@ class Funciones extends Table
         int $itemsPerPage = 10
     ): array {
         // Lista funciones con filtros, orden y paginacion
-        $sql = "SELECT * FROM funciones WHERE 1=1 ";
+        $sql = "SELECT funcionNombre AS fncod, funcionDescripcion AS fndsc, funcionStatus AS fnest, 'FNC' AS fntyp FROM funciones WHERE 1=1 ";
         $countSql = "SELECT COUNT(*) as total FROM funciones WHERE 1=1 ";
         $params = [];
 
         if ($partialName !== "") {
-            $sql .= " AND (fncod LIKE :partialName OR fndsc LIKE :partialName) ";
-            $countSql .= " AND (fncod LIKE :partialName OR fndsc LIKE :partialName) ";
+            $sql .= " AND (funcionNombre LIKE :partialName OR funcionDescripcion LIKE :partialName) ";
+            $countSql .= " AND (funcionNombre LIKE :partialName OR funcionDescripcion LIKE :partialName) ";
             $params["partialName"] = "%" . $partialName . "%";
         }
 
         if ($status !== "") {
-            $sql .= " AND fnest = :status ";
-            $countSql .= " AND fnest = :status ";
+            $sql .= " AND funcionStatus = :status ";
+            $countSql .= " AND funcionStatus = :status ";
             $params["status"] = $status;
         }
 
-        if ($type !== "") {
-            $sql .= " AND fntyp = :type ";
-            $countSql .= " AND fntyp = :type ";
-            $params["type"] = $type;
-        }
+        $columnMap = [
+            "fncod" => "funcionNombre",
+            "fndsc" => "funcionDescripcion",
+            "fnest" => "funcionStatus"
+        ];
 
-        $allowedOrderFields = ["fncod", "fndsc", "fnest", "fntyp"];
-        if ($orderBy !== "" && in_array($orderBy, $allowedOrderFields)) {
-            $sql .= " ORDER BY " . $orderBy;
+        if ($orderBy !== "" && isset($columnMap[$orderBy])) {
+            $sql .= " ORDER BY " . $columnMap[$orderBy];
             if ($orderDescending) {
                 $sql .= " DESC";
             }
@@ -73,9 +72,8 @@ class Funciones extends Table
     // =============================
     public static function getFuncionById(string $fncod): array|false
     {
-        $sql = "SELECT * FROM funciones WHERE fncod = :fncod";
-        // Devuelve una funcion especaAfica por codigo
-        $params = ["fncod" => $fncod];
+        $sql = "SELECT funcionNombre AS fncod, funcionDescripcion AS fndsc, funcionStatus AS fnest, 'FNC' AS fntyp FROM funciones WHERE funcionNombre = :funcionNombre";
+        $params = ["funcionNombre" => $fncod];
         return self::obtenerUnRegistro($sql, $params);
     }
 
@@ -88,14 +86,13 @@ class Funciones extends Table
         string $fnest,
         string $fntyp
     ): int {
-        // Inserta una nueva funcion/permiso
-        $sql = "INSERT INTO funciones (fncod, fndsc, fnest, fntyp) 
-                VALUES (:fncod, :fndsc, :fnest, :fntyp)";
+        // Inserta una nueva funcion/permiso sin almacenamiento de tipo tipo
+        $sql = "INSERT INTO funciones (funcionNombre, funcionDescripcion, funcionStatus)
+                VALUES (:funcionNombre, :funcionDescripcion, :funcionStatus)";
         $params = [
-            "fncod" => $fncod,
-            "fndsc" => $fndsc,
-            "fnest" => $fnest,
-            "fntyp" => $fntyp
+            "funcionNombre" => $fncod,
+            "funcionDescripcion" => $fndsc,
+            "funcionStatus" => $fnest
         ];
         return self::executeNonQuery($sql, $params);
     }
@@ -107,20 +104,23 @@ class Funciones extends Table
         string $fncod,
         string $fndsc,
         string $fnest,
-        string $fntyp
+        string $fntyp,
+        ?string $originalFncod = null
     ): int {
-        // Actualiza descripcion/estado/tipo de funcion existente
-        $sql = "UPDATE funciones 
-                SET fndsc = :fndsc,
-                    fnest = :fnest,
-                    fntyp = :fntyp
-                WHERE fncod = :fncod";
+        // Actualiza descripcion/estado de funcion existente
+        $sql = "UPDATE funciones
+                SET funcionNombre = :funcionNombre,
+                    funcionDescripcion = :funcionDescripcion,
+                    funcionStatus = :funcionStatus
+                WHERE funcionNombre = " . ($originalFncod !== null ? ":originalFncod" : ":funcionNombre");
         $params = [
-            "fncod" => $fncod,
-            "fndsc" => $fndsc,
-            "fnest" => $fnest,
-            "fntyp" => $fntyp
+            "funcionNombre" => $fncod,
+            "funcionDescripcion" => $fndsc,
+            "funcionStatus" => $fnest
         ];
+        if ($originalFncod !== null) {
+            $params["originalFncod"] = $originalFncod;
+        }
         return self::executeNonQuery($sql, $params);
     }
 
@@ -129,9 +129,8 @@ class Funciones extends Table
     // =============================
     public static function deleteFuncion(string $fncod): int
     {
-        $sql = "DELETE FROM funciones WHERE fncod = :fncod";
-        // Elimina funcion por codigo
-        $params = ["fncod" => $fncod];
+        $sql = "DELETE FROM funciones WHERE funcionNombre = :funcionNombre";
+        $params = ["funcionNombre" => $fncod];
         return self::executeNonQuery($sql, $params);
     }
 }

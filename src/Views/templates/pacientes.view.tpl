@@ -3,10 +3,12 @@
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
         <h2 style="font-size:3rem; color:#111827;">Pacientes</h2>
 
+        {{if showCrudActions}}
         <a class="btn btn--primary"
            href="index.php?page=PacientesController&action=create">
             + Nuevo paciente
         </a>
+        {{endif showCrudActions}}
     </div>
 
     <div style="
@@ -46,6 +48,7 @@
 
                     <td style="padding:14px;">
 
+                        {{if ~showCrudActions}}
                         <a href="index.php?page=PacientesController&action=edit&id={{id}}"
                            style="
                                 background:#0260CB;
@@ -69,6 +72,11 @@
                            ">
                             Eliminar
                         </a>
+                        {{endif ~showCrudActions}}
+
+                        {{ifnot ~showCrudActions}}
+                        <span style="color:#475569; font-size:.95rem;">Solo lectura - sin permisos de edición</span>
+                        {{endifnot ~showCrudActions}}
 
                     </td>
                 </tr>

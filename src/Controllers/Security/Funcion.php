@@ -21,6 +21,7 @@ class Funcion extends PrivateController
     ];
     private $readonly = "";
     private $showCommitBtn = true;
+    private $originalFncod = "";
     private $funcion = [
         "fncod" => "",
         "fndsc" => "",
@@ -68,6 +69,7 @@ class Funcion extends PrivateController
                 throw new \Exception("Función no encontrada");
             }
             $this->funcion = array_merge($this->funcion, $funcionData);
+            $this->originalFncod = $this->funcion["fncod"];
         }
     }
 
@@ -79,6 +81,7 @@ class Funcion extends PrivateController
         $errors = [];
         // Valida campos requeridos del formulario
         $this->funcion["fncod"] = trim($_POST["fncod"] ?? "");
+        $this->originalFncod = trim($_POST["fncod_original"] ?? $this->originalFncod);
         $this->funcion["fndsc"] = trim($_POST["fndsc"] ?? "");
         $this->funcion["fnest"] = $_POST["fnest"] ?? "ACT";
         $this->funcion["fntyp"] = $_POST["fntyp"] ?? "FNC";
@@ -128,7 +131,8 @@ class Funcion extends PrivateController
                     $this->funcion["fncod"],
                     $this->funcion["fndsc"],
                     $this->funcion["fnest"],
-                    $this->funcion["fntyp"]
+                    $this->funcion["fntyp"],
+                    $this->originalFncod
                 );
                 Site::redirectToWithMsg("index.php?page=Security_Funciones", "Función actualizada correctamente");
                 break;
@@ -145,15 +149,18 @@ class Funcion extends PrivateController
     private function setViewData(): void
     {
         $this->viewData["FormTitle"] = sprintf($this->modeDescriptions[$this->mode], $this->funcion["fncod"]);
-        // Prepara datos para renderizar formulario
-        $this->viewData["readonly"] = $this->readonly;
-        $this->viewData["showCommitBtn"] = $this->showCommitBtn;
+        $this->viewData["mode"] = $this->mode;
+        $this->viewData["field_readonly"] = ($this->mode === "DEL" || $this->mode === "DSP");
+        $this->viewData["show_commit"] = ($this->mode !== "DSP");
+        $this->viewData["is_delete"] = ($this->mode === "DEL");
 
+        // Prepara datos para renderizar formulario
         $estadoKey = "fnest_" . strtolower($this->funcion["fnest"]);
         $this->funcion[$estadoKey] = "selected";
 
         $tipoKey = "fntyp_" . strtolower($this->funcion["fntyp"]);
         $this->funcion[$tipoKey] = "selected";
+        $this->funcion["fncod_original"] = $this->originalFncod;
 
         $this->viewData = array_merge($this->viewData, $this->funcion);
     }

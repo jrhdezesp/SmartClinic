@@ -4,6 +4,7 @@ namespace Controllers;
 use Views\Renderer;
 use Dao\Medicos as DaoMedicos;
 use Dao\Especialidad as DaoEspecialidad;
+use Utilities\Security;
 use Utilities\Site;
 
 class MedicosController extends PublicController
@@ -41,11 +42,15 @@ class MedicosController extends PublicController
     private function index(): void
     {
         $this->viewData["medicos"] = DaoMedicos::getAllMedicos();
+        $this->viewData["showCrudActions"] = Security::isAuthorized(Security::getUserId(), 'MedicosController', 'CTR');
+        $this->viewData["canSchedule"] = Security::isLogged() && !$this->viewData["showCrudActions"];
         Renderer::render("medicos", $this->viewData);
     }
 
     private function create(): void
     {
+        $this->authorizeCrud();
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             DaoMedicos::insertMedico(
@@ -64,8 +69,18 @@ class MedicosController extends PublicController
         Renderer::render("medico_create", ["especialidades" => $especialidades]);
     }
 
+    private function authorizeCrud(): void
+    {
+        if (!Security::isAuthorized(Security::getUserId(), 'MedicosController', 'CTR')) {
+            Site::redirectTo("index.php?page=MedicosController&action=index");
+            exit;
+        }
+    }
+
     private function edit(): void
     {
+        $this->authorizeCrud();
+
         $id = intval($_GET["id"] ?? 0);
 
         if ($id <= 0) {
@@ -99,6 +114,8 @@ class MedicosController extends PublicController
 
     private function delete(): void
     {
+        $this->authorizeCrud();
+
         $id = intval($_GET["id"] ?? 0);
 
         if ($id > 0) {

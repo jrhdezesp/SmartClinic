@@ -1,21 +1,46 @@
 <div class="container section-pad">
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; margin-bottom:16px;">
         <h2 style="font-size:3rem; color:#111827;">Citas</h2>
 
         {{if showCrudActions}}
-        <a class="btn btn--primary" href="index.php?page=CitasController&action=agendar">
+        <button type="button" class="btn btn--primary"
+                style="background:#0260CB; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600;"
+                onclick="window.location.href='index.php?page=CitasController&action=agendar'">
             + Nueva cita
-        </a>
+        </button>
         {{endif showCrudActions}}
+    </div>
+
+    <div class="list-toolbar">
+        <form method="GET" action="index.php" class="toolbar-form">
+            <input type="hidden" name="page" value="CitasController" />
+            <input type="hidden" name="action" value="index" />
+            <div class="toolbar-row">
+                <div class="toolbar-field">
+                    <label>Buscar</label>
+                    <input type="search" name="search" value="{{searchValue}}" placeholder="Buscar por paciente, médico, especialidad o fecha" />
+                </div>
+                <div class="toolbar-field">
+                    <label>Estado</label>
+                    <select name="estado">
+                        {{foreach estadoOptions}}
+                        <option value="{{value}}" {{if selected}}selected{{endif selected}}>{{label}}</option>
+                        {{endfor estadoOptions}}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn--primary toolbar-submit">Buscar</button>
+            </div>
+        </form>
     </div>
 
     {{if citas}}
     <div style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.08);">
-        <table style="width:100%; border-collapse:collapse;">
-            <thead>
+        <div class="table-responsive">
+            <table style="width:100%; border-collapse:collapse; text-align:left;">
+                <thead>
                 <tr style="background:#033B9F; color:white;">
-                    <th style="padding:15px;">ID</th>
+                    <th style="padding:15px; text-align:left; vertical-align:middle;">ID</th>
                     <th style="padding:15px;">Paciente</th>
                     <th style="padding:15px;">Médico</th>
                     <th style="padding:15px;">Especialidad</th>
@@ -27,17 +52,17 @@
             <tbody>
                 {{foreach citas}}
                 <tr style="border-bottom:1px solid #E5E7EB;">
-                    <td style="padding:14px;">{{id}}</td>
-                    <td style="padding:14px;">{{paciente_nombres}} {{paciente_apellidos}}</td>
-                    <td style="padding:14px;">{{medico_nombres}} {{medico_apellidos}}</td>
-                    <td style="padding:14px;">{{nombre_especialidad}}</td>
-                    <td style="padding:14px;">{{fecha_hora}}</td>
-                    <td style="padding:14px;">
+                    <td style="padding:14px; vertical-align:middle;">{{id}}</td>
+                    <td style="padding:14px; vertical-align:middle;">{{paciente_nombres}} {{paciente_apellidos}}</td>
+                    <td style="padding:14px; vertical-align:middle;">{{medico_nombres}} {{medico_apellidos}}</td>
+                    <td style="padding:14px; vertical-align:middle;">{{nombre_especialidad}}</td>
+                    <td style="padding:14px; vertical-align:middle;">{{fecha_hora}}</td>
+                    <td style="padding:14px; vertical-align:middle;">
                         <span style="background:#EFF6FF; color:#0b4bb8; padding:4px 12px; border-radius:999px; font-size:.85rem; font-weight:700;">
                             {{nombre_estado}}
                         </span>
                     </td>
-                    <td style="padding:14px;">
+                    <td style="padding:14px; vertical-align:middle;">
                         {{if ~showCrudActions}}
                         <a href="index.php?page=CitasController&action=edit&id={{id}}" style="background:#0260CB; color:white; padding:8px 12px; border-radius:8px; text-decoration:none; margin-right:5px;">
                             Editar
@@ -55,6 +80,7 @@
                 {{endfor citas}}
             </tbody>
         </table>
+        </div>
     </div>
     {{endif citas}}
 

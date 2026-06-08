@@ -41,9 +41,41 @@ class MedicosController extends PublicController
 
     private function index(): void
     {
-        $this->viewData["medicos"] = DaoMedicos::getAllMedicos();
+        $search = trim(strval($_GET["search"] ?? ""));
+        $especialidad = trim(strval($_GET["especialidad"] ?? ""));
+        $medicos = DaoMedicos::getAllMedicos();
+
+        if ($search !== "" || $especialidad !== "") {
+            $searchLower = strtolower($search);
+            $especialidadLower = strtolower($especialidad);
+            $medicos = array_filter($medicos, function ($item) use ($searchLower, $especialidadLower) {
+                $matchSearch = $searchLower === "" ||
+                    strpos(strtolower($item["nombres"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["apellidos"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["nombre_especialidad"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["num_colegiatura"] ?? ""), $searchLower) !== false;
+                $matchEspecialidad = $especialidadLower === "" ||
+                    strpos(strtolower($item["nombre_especialidad"] ?? ""), $especialidadLower) !== false;
+                return $matchSearch && $matchEspecialidad;
+            });
+        }
+
+        $this->viewData["medicos"] = array_values($medicos);
         $this->viewData["showCrudActions"] = Security::isAuthorized(Security::getUserId(), 'MedicosController', 'CTR');
         $this->viewData["canSchedule"] = Security::isLogged() && !$this->viewData["showCrudActions"];
+        $this->viewData["searchValue"] = $search;
+        $this->viewData["especialidadFilter"] = $especialidad;
+        $especialidades = DaoEspecialidad::getAllEspecialidades();
+        $this->viewData["especialidades"] = array_merge([
+            [
+                "id" => 0,
+                "nombre_especialidad" => "Todas",
+                "selected" => $especialidad === ""
+            ]
+        ], array_map(function ($especialidadItem) use ($especialidad) {
+            $especialidadItem["selected"] = strcasecmp($especialidadItem["nombre_especialidad"], $especialidad) === 0;
+            return $especialidadItem;
+        }, $especialidades));
         Renderer::render("medicos", $this->viewData);
     }
 
@@ -105,6 +137,10 @@ class MedicosController extends PublicController
 
         $medico = DaoMedicos::getMedicoById($id);
         $especialidades = DaoEspecialidad::getAllEspecialidades();
+        foreach ($especialidades as &$especialidad) {
+            $especialidad['selected'] = intval($especialidad['id']) === intval($medico['especialidad_id']);
+        }
+        unset($especialidad);
 
         Renderer::render(
             "medico_edit",

@@ -44,8 +44,22 @@ class PacientesController extends PublicController
         $isAdmin = $userId === 1 || Security::isInRol($userId, 1);
         $showCrudActions = Security::isAuthorized($userId, 'PacientesController', 'CTR') || $isAdmin;
 
-        $this->viewData["pacientes"] = DaoPacientes::getAllPacientes();
+        $search = trim(strval($_GET["search"] ?? ""));
+        $pacientes = DaoPacientes::getAllPacientes();
+        if ($search !== "") {
+            $searchLower = strtolower($search);
+            $pacientes = array_filter($pacientes, function ($item) use ($searchLower) {
+                return strpos(strtolower($item["identidad"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["nombres"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["apellidos"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["telefono"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["direccion"] ?? ""), $searchLower) !== false;
+            });
+        }
+
+        $this->viewData["pacientes"] = array_values($pacientes);
         $this->viewData["showCrudActions"] = $showCrudActions;
+        $this->viewData["searchValue"] = $search;
         Renderer::render("pacientes", $this->viewData);
     }
 

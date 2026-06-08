@@ -1,1 +1,47 @@
-<div class="container"><form method="POST"><select name="especialidad_id" required><option value="">Seleccione...</option>{{foreach especialidades}}<option value="{{id}}">{{nombre_especialidad}}</option>{{endfor especialidades}}</select><input type="text" name="num_colegiatura" required placeholder="N° Colegiatura"><input type="text" name="nombres" required placeholder="Nombres"><input type="text" name="apellidos" required placeholder="Apellidos"><input type="text" name="telefono" required placeholder="Teléfono"><button type="submit">Guardar Médico</button></form></div>
+<div class="container section-pad">
+  <div class="form-card">
+    <div style="margin-bottom:30px;">
+      <h2 style="color:#033B9F; margin-bottom:10px; font-size:2.2rem;">Registrar Médico</h2>
+      <p style="color:#636366;">Completa los datos del médico para agregarlo al sistema.</p>
+    </div>
+
+    <form method="POST">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Especialidad</label>
+          <select name="especialidad_id" required>
+            <option value="">Seleccione...</option>
+            {{foreach especialidades}}
+            <option value="{{id}}">{{nombre_especialidad}}</option>
+            {{endfor especialidades}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>N° Colegiatura</label>
+          <input type="text" name="num_colegiatura" required placeholder="Número de colegiatura">
+        </div>
+
+        <div class="form-group">
+          <label>Nombres</label>
+          <input type="text" name="nombres" required placeholder="Nombres">
+        </div>
+
+        <div class="form-group">
+          <label>Apellidos</label>
+          <input type="text" name="apellidos" required placeholder="Apellidos">
+        </div>
+
+        <div class="form-group" style="grid-column:1/3;">
+          <label>Teléfono</label>
+          <input type="text" name="telefono" required placeholder="Teléfono">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a href="index.php?page=MedicosController&action=index" class="btn btn--outline">Cancelar</a>
+        <button type="submit" class="btn btn--primary">Guardar Médico</button>
+      </div>
+    </form>
+  </div>
+</div>

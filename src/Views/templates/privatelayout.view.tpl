@@ -6,6 +6,7 @@
   <title>{{SITE_TITLE}} | Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{~BASE_DIR}}/public/css/main.css" />
   {{if FONT_AWESOME_KIT}}
   <script src="https://kit.fontawesome.com/{{FONT_AWESOME_KIT}}.js" crossorigin="anonymous"></script>
   {{endif FONT_AWESOME_KIT}}
@@ -108,12 +109,198 @@
     }
     .sidebar ul li.divider { border-top: 1px solid rgba(255,255,255,0.15); margin: 0.5rem 0; }
 
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .table-responsive table {
+      width: 100%;
+      min-width: 0;
+      border-collapse: collapse;
+    }
+    .table-responsive th,
+    .table-responsive td {
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    .container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 88px 0; }
+    .form-card {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(3, 59, 159, 0.12);
+      border: 1px solid #EAF5FD;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #17203a;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #C7C7CC;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 1rem;
+    }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .form-actions {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 15px;
+    }
+    .form-actions a,
+    .form-actions button { min-width: 140px; }
+
+    .list-toolbar {
+      margin-bottom: 22px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(3, 59, 159, 0.08);
+    }
+    .toolbar-form {
+      width: 100%;
+    }
+    .toolbar-row {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .toolbar-field {
+      flex: 1;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 18px 18px 16px;
+      border: 1px solid #E5E7EB;
+      border-radius: 18px;
+      background: #F8FAFC;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+    .toolbar-field label {
+      font-weight: 700;
+      color: #334155;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .toolbar-field input,
+    .toolbar-field select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #c7c7cc;
+      border-radius: 14px;
+      background: #fff;
+      font-size: 0.95rem;
+    }
+    .toolbar-field input:focus,
+    .toolbar-field select:focus {
+      outline: none;
+      border-color: #033B9F;
+      box-shadow: 0 0 0 4px rgba(3, 59, 159, 0.08);
+    }
+    .toolbar-submit {
+      min-width: 160px;
+      align-self: flex-end;
+    }
+    @media (max-width: 900px) {
+      .toolbar-row {
+        gap: 12px;
+      }
+    }
+    @media (max-width: 760px) {
+      .toolbar-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .toolbar-field {
+        min-width: 0;
+        width: 100%;
+      }
+      .toolbar-submit {
+        width: 100%;
+        align-self: stretch;
+      }
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn--primary {
+      background: var(--cedro);
+      color: var(--blanco);
+      border: 2px solid var(--cedro);
+    }
+    .btn--primary:hover {
+      background: #0251a0;
+      border-color: #0251a0;
+      transform: translateY(-1px);
+    }
+    .btn--outline {
+      background: transparent;
+      color: var(--cedro);
+      border: 2px solid var(--sc-gray-200);
+    }
+    .btn--outline:hover {
+      background: var(--arena);
+      border-color: var(--cedro);
+    }
+
+    @media (max-width: 760px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-actions { justify-content: stretch; }
+      .form-actions a,
+      .form-actions button { width: 100%; }
+    }
+
     /* MAIN */
     main { flex: 1; padding: 2.5rem 5%; }
     footer { background: var(--cedro); color: var(--blanco); text-align: center; padding: 28px 20px; margin-top: auto; }
+    footer, footer * { color: var(--blanco) !important; }
 
     @media(max-width: 768px) {
-      .header { flex-wrap: wrap; gap: 10px; }
+      .header {
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: space-between;
+      }
+      .username-label {
+        display: none;
+      }
+      .nav-right {
+        display: none;
+      }
+      .table-responsive table { min-width: 0; }
+      .table-responsive th,
+      .table-responsive td { padding: 10px 12px; font-size: 0.95rem; }
     }
   </style>
 </head>
@@ -140,7 +327,6 @@
 
   <nav class="sidebar">
     <ul>
-      <li><a href="index.php?page={{PRIVATE_DEFAULT_CONTROLLER}}"><svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 8h-3v10h-5v-6H11v6H6V11H3l9-8z"/></svg> Inicio</a></li>
       {{foreach NAVIGATION}}
       <li><a href="{{nav_url}}">{{nav_label}}</a></li>
       {{endfor NAVIGATION}}

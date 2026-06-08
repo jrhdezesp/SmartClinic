@@ -133,7 +133,11 @@ class Security
     // =============================
     public static function isAuthorized($userId, $function, $type = 'FNC'): bool
     {
-        // El administrador del sistema tiene acceso completo
+        // El administrador del sistema tiene acceso completo (userId 1)
+        if (intval($userId) === 1) {
+            return true;
+        }
+        // También se considera admin si pertenece al rol 1
         if (self::isInRol($userId, 1)) {
             return true;
         }

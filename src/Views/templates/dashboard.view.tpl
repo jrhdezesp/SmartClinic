@@ -1,10 +1,12 @@
 <style>
   .dashboard-shell {
+    width: 100%;
     max-width: 1120px;
     margin: 0 auto;
-    padding: 2.5rem 0;
+    padding: 2.5rem 1.5rem;
     display: grid;
     gap: 1.5rem;
+    min-width: 0;
   }
   .hero-card {
     background: linear-gradient(135deg, #0b4bb8 0%, #0f6fe2 100%);
@@ -16,6 +18,7 @@
     gap: 1.5rem;
     align-items: center;
     overflow: hidden;
+    min-width: 0;
   }
   .hero-card h1 {
     font-size: 2.4rem;
@@ -148,12 +151,15 @@
   .table-simple {
     width: 100%;
     border-collapse: collapse;
+    min-width: 0;
   }
   .table-simple th,
   .table-simple td {
     padding: 1rem 1rem;
     text-align: left;
     border-bottom: 1px solid #e2e8f0;
+    white-space: normal;
+    word-break: break-word;
   }
   .table-simple th {
     font-size: 0.8rem;
@@ -181,11 +187,62 @@
       grid-template-columns: 1fr;
       text-align: left;
     }
+    .hero-actions {
+      justify-content: flex-start;
+    }
     .stats-grid {
       grid-template-columns: repeat(1, minmax(0, 1fr));
     }
     .card-grid {
       grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .dashboard-shell {
+      padding: 1.5rem 1rem;
+    }
+    .hero-card {
+      gap: 1rem;
+      padding: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+    .hero-card h1 {
+      font-size: 2rem;
+    }
+    .hero-card p {
+      font-size: 0.95rem;
+      max-width: 100%;
+    }
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .hero-actions a {
+      width: 100%;
+      justify-content: center;
+    }
+    .section-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    .action-buttons {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .table-simple th,
+    .table-simple td {
+      padding: 0.85rem;
+      font-size: 0.9rem;
+    }
+    .card-panel {
+      padding: 1.2rem;
     }
   }
 </style>
@@ -225,9 +282,9 @@
       <div class="hint">Profesionales listos para atender citas.</div>
     </div>
     <div class="stat-card">
-      <span class="label">Mis citas</span>
-      <div class="value"><a href="index.php?page=CitasController&action=index" style="color:#0b4bb8; text-decoration:none;">Ver agenda</a></div>
-      <div class="hint">Accede a tu historial de citas agendadas.</div>
+      <span class="label">Citas agendadas</span>
+      <div class="value">{{total_citas}}</div>
+      <div class="hint">Número total de citas en el sistema.</div>
     </div>
   </div>
 
@@ -259,6 +316,7 @@
         <a href="index.php?page=MedicosController&action=index">Todos los médicos</a>
       </div>
       {{if medicos}}
+      <div class="table-responsive">
       <table class="table-simple">
         <thead>
           <tr>
@@ -277,6 +335,7 @@
           {{endfor medicos}}
         </tbody>
       </table>
+      </div>
       {{endif medicos}}
       {{ifnot medicos}}
       <p>No hay médicos registrados aún.</p>
@@ -286,28 +345,64 @@
 
   <section class="card-panel">
     <div class="section-head">
+      <h2>Próximas citas</h2>
+      <a href="index.php?page=CitasController&action=index">Ver todas</a>
+    </div>
+    {{if citas}}
+    <div class="table-responsive">
+    <table class="table-simple">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Paciente</th>
+          <th>Médico</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{foreach citas}}
+        <tr>
+          <td>{{fecha_hora}}</td>
+          <td>{{paciente_nombres}} {{paciente_apellidos}}</td>
+          <td>{{medico_nombres}} {{medico_apellidos}}</td>
+          <td><span class="badge-pill">{{nombre_estado}}</span></td>
+        </tr>
+        {{endfor citas}}
+      </tbody>
+    </table>
+    </div>
+    {{endif citas}}
+    {{ifnot citas}}
+    <p>No hay citas próximas registradas.</p>
+    {{endifnot citas}}
+  </section>
+
+  <section class="card-panel">
+    <div class="section-head">
       <h2>Pacientes recientes</h2>
       <a href="index.php?page=PacientesController&action=index">Ver todos</a>
     </div>
     {{if pacientes}}
-    <table class="table-simple">
-      <thead>
-        <tr>
-          <th>Paciente</th>
-          <th>Identidad</th>
-          <th>Teléfono</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{foreach pacientes}}
-        <tr>
-          <td>{{nombres}} {{apellidos}}</td>
-          <td>{{identidad}}</td>
-          <td>{{telefono}}</td>
-        </tr>
-        {{endfor pacientes}}
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table-simple">
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Identidad</th>
+            <th>Teléfono</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{foreach pacientes}}
+          <tr>
+            <td>{{nombres}} {{apellidos}}</td>
+            <td>{{identidad}}</td>
+            <td>{{telefono}}</td>
+          </tr>
+          {{endfor pacientes}}
+        </tbody>
+      </table>
+    </div>
     {{endif pacientes}}
     {{ifnot pacientes}}
     <p>No hay pacientes registrados aún.</p>

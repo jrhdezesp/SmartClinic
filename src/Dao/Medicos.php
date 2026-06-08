@@ -5,7 +5,8 @@ class Medicos extends Table
 {
     public static function getAllMedicos(): array
     {
-        $sql = "SELECT m.*, e.nombre_especialidad FROM medico m JOIN especialidad e ON m.especialidad_id = e.id ORDER BY m.id DESC";
+        // Mostrar en orden ascendente (1,2,3...) para listados legibles
+        $sql = "SELECT m.*, e.nombre_especialidad FROM medico m JOIN especialidad e ON m.especialidad_id = e.id ORDER BY m.id ASC";
         return parent::obtenerRegistros($sql, []);
     }
 

@@ -1,6 +1,6 @@
 # SmartClinic v1.0
 
-Logo: /public/img/logo_full.png
+![Logo](public/img/logo_full.png)
 
 ## Integrantes
 - Anyelo Favian Rivera Galindo - 1501200402099
@@ -12,7 +12,7 @@ Logo: /public/img/logo_full.png
 ## Tecnologías utilizadas
 - Código / Controlador: Php + Composer
 - Base de Datos / Modelo: MySQL
-- Diseño / Vistas: HTML + CSS + JS + Bootstrap
+- Diseño / Vistas: HTML + CSS Custom (LESS) + JavaScript
 - DevOps: Docker / XAMPP
 - Control de Versiones: Github
 
@@ -38,7 +38,6 @@ Desarrollado bajo el patrón MVC, garantiza alta velocidad, consistencia relacio
   - `css/`
   - `css_src/`
   - `img/`
-    - `logo_full.png`
   - `js/`
 - `src/`
   - `Controllers/`

@@ -23,6 +23,7 @@ class Rol extends PrivateController
 
     private $readonly = "";
     private $showCommitBtn = true;
+    private $originalRolescod = "";
 
     private $rol = [
         "rolescod" => "",
@@ -72,6 +73,7 @@ class Rol extends PrivateController
                 throw new \Exception("Rol no encontrado");
             }
             $this->rol = array_merge($this->rol, $rolData);
+            $this->originalRolescod = $this->rol["rolescod"];
         }
     }
 
@@ -84,6 +86,7 @@ class Rol extends PrivateController
         $errors = [];
 
         $this->rol["rolescod"] = trim($_POST["rolescod"] ?? "");
+        $this->originalRolescod = trim($_POST["rolescod_original"] ?? $this->originalRolescod);
         $this->rol["rolesdsc"] = trim($_POST["rolesdsc"] ?? "");
         $this->rol["rolesest"] = $_POST["rolesest"] ?? "ACT";
 
@@ -126,7 +129,8 @@ class Rol extends PrivateController
                 DaoRoles::updateRole(
                     $this->rol["rolescod"],
                     $this->rol["rolesdsc"],
-                    $this->rol["rolesest"]
+                    $this->rol["rolesest"],
+                    $this->originalRolescod
                 );
                 Site::redirectToWithMsg("index.php?page=Security_Roles", "Rol actualizado correctamente");
                 break;
@@ -144,13 +148,16 @@ class Rol extends PrivateController
     private function setViewData(): void
     {
         $this->viewData["FormTitle"] = sprintf($this->modeDescriptions[$this->mode], $this->rol["rolescod"]);
-        $this->viewData["readonly"] = $this->readonly;
-        $this->viewData["showCommitBtn"] = $this->showCommitBtn;
+        $this->viewData["mode"] = $this->mode;
+        $this->viewData["field_readonly"] = ($this->mode === "DEL" || $this->mode === "DSP");
+        $this->viewData["show_commit"] = ($this->mode !== "DSP");
+        $this->viewData["is_delete"] = ($this->mode === "DEL");
 
         // Prepara variables para formulario de rol
         // Variables para el select de estado
         $estadoKey = "rolesest_" . strtolower($this->rol["rolesest"]);
         $this->rol[$estadoKey] = "selected";
+        $this->rol["rolescod_original"] = $this->originalRolescod;
 
         // Fusionar todas las variables del rol en el primer nivel de viewData
         $this->viewData = array_merge($this->viewData, $this->rol);

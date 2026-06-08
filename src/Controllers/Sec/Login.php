@@ -68,7 +68,7 @@ class Login extends \Controllers\PublicController
                             );
                         } else {
                             if (\Utilities\Security::isInRol($dbUser["usercod"], 1)) {
-                                \Utilities\Site::redirectTo("index.php?page=Home");
+                                \Utilities\Site::redirectTo("index.php?page=HomeController");
                             } else {
                                 \Utilities\Site::redirectTo("index.php");
                             }

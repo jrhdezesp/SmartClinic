@@ -8,7 +8,8 @@ class Pacientes extends Table
 {
     public static function getAllPacientes(): array
     {
-        $sql = "SELECT * FROM paciente ORDER BY id DESC";
+        // Mostrar pacientes en orden ascendente
+        $sql = "SELECT * FROM paciente ORDER BY id ASC";
         return parent::obtenerRegistros($sql, []);
     }
 

@@ -24,7 +24,9 @@ abstract class PrivateController extends PublicController
 {
     private function _isAuthorized()
     {
-        if ($this->name === "Controllers\\Security\\Perfil") {
+        if ($this->name === "Controllers\\Security\\Perfil"
+            || $this->name === "Controllers\\HomeController"
+        ) {
             return;
         }
         $isAuthorized = \Utilities\Security::isAuthorized(

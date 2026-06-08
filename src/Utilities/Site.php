@@ -25,6 +25,9 @@ class Site
             }, $parts);
             $pageRequest = implode("\\", $parts);
         }
+        if ($pageRequest === 'Home') {
+            $pageRequest = 'HomeController';
+        }
         Context::setArrayToContext($_GET);
         Context::setContext("request_uri", $_SERVER["REQUEST_URI"]);
         return "Controllers\\" . $pageRequest;

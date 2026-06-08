@@ -19,7 +19,7 @@ class Roles extends Table
         int $itemsPerPage = 10
     ): array {
         // Lista roles con filtros, orden y paginacion
-        $sql = "SELECT * FROM roles WHERE 1=1 ";
+        $sql = "SELECT rolNombre AS rolescod, rolDescripcion AS rolesdsc, rolStatus AS rolesest FROM roles WHERE 1=1 ";
         $countSql = "SELECT COUNT(*) as total FROM roles WHERE 1=1 ";
         $params = [];
 
@@ -35,10 +35,14 @@ class Roles extends Table
             $params["status"] = $status;
         }
 
-        // Validar orderBy para evitar inyeccion SQL
-        $allowedOrderFields = ["rolId", "rolNombre", "rolStatus"];
-        if ($orderBy !== "" && in_array($orderBy, $allowedOrderFields)) {
-            $sql .= " ORDER BY " . $orderBy;
+        $columnMap = [
+            "rolescod" => "rolNombre",
+            "rolesdsc" => "rolDescripcion",
+            "rolesest" => "rolStatus"
+        ];
+
+        if ($orderBy !== "" && isset($columnMap[$orderBy])) {
+            $sql .= " ORDER BY " . $columnMap[$orderBy];
             if ($orderDescending) {
                 $sql .= " DESC";
             }
@@ -67,11 +71,11 @@ class Roles extends Table
     // =============================
     // GETROLEBYID
     // =============================
-    public static function getRoleById(string $rolId): array|false
+    public static function getRoleById(string $rolNombre): array|false
     {
-        // Devuelve un rol puntual por ID
-        $sql = "SELECT * FROM roles WHERE rolId = :rolId";
-        $params = ["rolId" => $rolId];
+        // Devuelve un rol puntual por su nombre/código
+        $sql = "SELECT rolNombre AS rolescod, rolDescripcion AS rolesdsc, rolStatus AS rolesest FROM roles WHERE rolNombre = :rolNombre";
+        $params = ["rolNombre" => $rolNombre];
         return self::obtenerUnRegistro($sql, $params);
     }
 
@@ -98,34 +102,36 @@ class Roles extends Table
     // UPDATEROLE
     // =============================
     public static function updateRole(
-        string $rolId,
         string $rolNombre,
         string $rolDescripcion,
-        string $rolStatus
+        string $rolStatus,
+        ?string $originalRolNombre = null
     ): int {
         // Actualiza nombre, descripcion y estado del rol
         $sql = "UPDATE roles
                 SET rolNombre = :rolNombre,
                     rolDescripcion = :rolDescripcion,
                     rolStatus = :rolStatus
-                WHERE rolId = :rolId";
+                WHERE rolNombre = " . ($originalRolNombre !== null ? ":originalRolNombre" : ":rolNombre");
         $params = [
-            "rolId" => $rolId,
             "rolNombre" => $rolNombre,
             "rolDescripcion" => $rolDescripcion,
             "rolStatus" => $rolStatus
         ];
+        if ($originalRolNombre !== null) {
+            $params["originalRolNombre"] = $originalRolNombre;
+        }
         return self::executeNonQuery($sql, $params);
     }
 
     // =============================
     // DELETEROLE
     // =============================
-    public static function deleteRole(string $rolId): int
+    public static function deleteRole(string $rolNombre): int
     {
-        // Elimina rol por ID
-        $sql = "DELETE FROM roles WHERE rolId = :rolId";
-        $params = ["rolId" => $rolId];
+        // Elimina rol por código
+        $sql = "DELETE FROM roles WHERE rolNombre = :rolNombre";
+        $params = ["rolNombre" => $rolNombre];
         return self::executeNonQuery($sql, $params);
     }
 }

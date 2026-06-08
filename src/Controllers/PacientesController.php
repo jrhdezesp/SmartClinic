@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Views\Renderer;
 use Dao\Pacientes as DaoPacientes;
+use Utilities\Security;
 use Utilities\Site;
 
 class PacientesController extends PublicController
@@ -39,12 +40,33 @@ class PacientesController extends PublicController
 
     private function index(): void
     {
-    $this->viewData["pacientes"] = DaoPacientes::getAllPacientes();
-    Renderer::render("pacientes", $this->viewData);
+        $userId = Security::getUserId();
+        $isAdmin = $userId === 1 || Security::isInRol($userId, 1);
+        $showCrudActions = Security::isAuthorized($userId, 'PacientesController', 'CTR') || $isAdmin;
+
+        $search = trim(strval($_GET["search"] ?? ""));
+        $pacientes = DaoPacientes::getAllPacientes();
+        if ($search !== "") {
+            $searchLower = strtolower($search);
+            $pacientes = array_filter($pacientes, function ($item) use ($searchLower) {
+                return strpos(strtolower($item["identidad"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["nombres"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["apellidos"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["telefono"] ?? ""), $searchLower) !== false ||
+                    strpos(strtolower($item["direccion"] ?? ""), $searchLower) !== false;
+            });
+        }
+
+        $this->viewData["pacientes"] = array_values($pacientes);
+        $this->viewData["showCrudActions"] = $showCrudActions;
+        $this->viewData["searchValue"] = $search;
+        Renderer::render("pacientes", $this->viewData);
     }
 
     private function create(): void
     {
+        $this->authorizeCrud();
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             DaoPacientes::insertPaciente(
@@ -63,8 +85,21 @@ class PacientesController extends PublicController
         Renderer::render("paciente_create", []);
     }
 
+    private function authorizeCrud(): void
+    {
+        $userId = Security::getUserId();
+        $isAdmin = $userId === 1 || Security::isInRol($userId, 1);
+
+        if (!Security::isAuthorized($userId, 'PacientesController', 'CTR') && !$isAdmin) {
+            Site::redirectTo("index.php?page=PacientesController&action=index");
+            exit;
+        }
+    }
+
     private function edit(): void
     {
+        $this->authorizeCrud();
+
         $id = intval($_GET["id"] ?? 0);
 
         if ($id <= 0) {
@@ -98,6 +133,8 @@ class PacientesController extends PublicController
 
     private function delete(): void
     {
+        $this->authorizeCrud();
+
         $id = intval($_GET["id"] ?? 0);
 
         if ($id > 0) {

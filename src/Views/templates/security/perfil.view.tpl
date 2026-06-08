@@ -62,8 +62,8 @@
   }
   .name-form button {
     border: none;
-    background: var(--dorado);
-    color: #3c2d23;
+    background: #0b4bb8;
+    color: #fff;
     font-weight: 700;
     border-radius: 10px;
     padding: 0.6rem 0.9rem;

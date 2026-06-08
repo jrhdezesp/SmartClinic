@@ -240,8 +240,11 @@ p  { color: var(--sc-gray-500); line-height: 1.75; }
 /*Footer*/
 #sc-footer {
     background: var(--sc-gray-900);
-    color: rgba(255,255,255,.6);
+    color: #ffffff;
     padding: 56px 0 28px;
+}
+#sc-footer, #sc-footer * {
+    color: #ffffff !important;
 }
 .footer-grid {
     display: grid;
@@ -262,7 +265,7 @@ p  { color: var(--sc-gray-500); line-height: 1.75; }
 .footer-col a:hover { color: var(--sc-blue-200); }
 .footer-bottom {
     display: flex; justify-content: space-between;
-    font-size: 12px; color: rgba(255,255,255,.28);
+    font-size: 12px; color: #ffffff;
 }
 
 /*Animaciones de entrada*/
@@ -309,9 +312,154 @@ p  { color: var(--sc-gray-500); line-height: 1.75; }
     margin: 0 auto;
 }
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.table-responsive table {
+    width: 100%;
+    min-width: 0;
+    border-collapse: collapse;
+}
+.table-responsive th,
+.table-responsive td {
+    text-align: left;
+    vertical-align: middle;
+}
+
+.form-card {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(3, 59, 159, 0.12);
+    border: 1px solid #EAF5FD;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #17203a;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #C7C7CC;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 1rem;
+}
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+.form-actions {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 15px;
+}
+.form-actions a,
+.form-actions button {
+    min-width: 140px;
+}
+
+.list-toolbar {
+    margin-bottom: 22px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(3, 59, 159, 0.08);
+}
+.toolbar-form {
+    width: 100%;
+}
+.toolbar-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+.toolbar-field {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 18px 16px;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    background: #F8FAFC;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+.toolbar-field label {
+    font-weight: 700;
+    color: #334155;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.toolbar-field input,
+.toolbar-field select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #c7c7cc;
+    border-radius: 14px;
+    background: #fff;
+    font-size: 0.95rem;
+}
+.toolbar-field input:focus,
+.toolbar-field select:focus {
+    outline: none;
+    border-color: #033B9F;
+    box-shadow: 0 0 0 4px rgba(3, 59, 159, 0.08);
+}
+.toolbar-submit {
+    min-width: 160px;
+    align-self: flex-end;
+}
+@media (max-width: 900px) {
+    .toolbar-row {
+        gap: 12px;
+    }
+}
+@media (max-width: 760px) {
+    .toolbar-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .toolbar-field {
+        min-width: 0;
+        width: 100%;
+    }
+    .toolbar-submit {
+        width: 100%;
+        align-self: stretch;
+    }
+}
+
 /*Responsive*/
 @media (max-width: 900px) {
     .footer-grid { grid-template-columns: 1fr 1fr; }
+    .table-responsive table { min-width: 0; }
+}
+@media (max-width: 760px) {
+    .form-card { padding: 28px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-actions { justify-content: stretch; }
+    .form-actions a,
+    .form-actions button { width: 100%; }
 }
 @media (max-width: 640px) {
     .section-pad { padding: 56px 0; }
@@ -319,4 +467,8 @@ p  { color: var(--sc-gray-500); line-height: 1.75; }
     .nav-toggle { display: flex; }
     .footer-grid { grid-template-columns: 1fr; gap: 28px; }
     .footer-bottom { flex-direction: column; gap: 4px; }
+    .table-responsive table { min-width: 0; }
+    .table-responsive th,
+    .table-responsive td { padding: 11px 12px; font-size: 0.95rem; }
+    .table-responsive th { white-space: nowrap; }
 }

@@ -169,6 +169,8 @@ VALUES (
         'ACT'
     );
 
+-- La contraseña original del administrador es: SmartClinic#2026
+-- En la base de datos se guarda la contraseña hasheada.
 INSERT INTO
     usuario (
         usercod,
@@ -187,7 +189,7 @@ VALUES (
         1,
         'Administrador',
         'admin@smartclinic.com',
-        'SmartClinic#2026',
+        '$2y$10$qozQxczCslUQ0Jk6AShyXOCQh7HZwMePuCgHq7LKWMIdmC2HDZNBm',
         CURRENT_TIMESTAMP,
         'ACT',
         NULL,
@@ -301,7 +303,11 @@ INSERT INTO
     especialidad (id, nombre_especialidad)
 VALUES (1, 'Medicina General'),
     (2, 'Pediatría'),
-    (3, 'Ginecología');
+    (3, 'Ginecología'),
+    (4, 'Cardiología'),
+    (5, 'Dermatología'),
+    (6, 'Ortopedia'),
+    (7, 'Neurología');
 
 INSERT INTO
     estado_cita (id, nombre_estado)

@@ -32,11 +32,7 @@
         <li><a href="index.php?page=Contacto"{{if nav_Contacto}} class="active"{{endif nav_Contacto}}>Contacto</a></li>
       </ul>
 
-      {{if login}}
-      <a href="index.php?page=Home" class="nav-cta">Panel</a>
-      {{else}}
-      <a href="index.php?page=Sec_Login" class="nav-cta">Iniciar sesión</a>
-      {{endif login}}
+      <a href="index.php?page=Sec_Login" class="btn btn--light nav-login-btn desktop-only">Iniciar sesión</a>
 
       <button class="nav-toggle" id="navToggle" aria-label="Menú">
         <span></span><span></span><span></span>
@@ -49,11 +45,7 @@
         <li><a href="index.php?page=Nosotros">Nosotros</a></li>
         <li><a href="index.php?page=Servicios">Servicios</a></li>
         <li><a href="index.php?page=Contacto">Contacto</a></li>
-        {{if login}}
-        <li><a href="index.php?page=Home" class="nav-cta">Panel</a></li>
-        {{else}}
-        <li><a href="index.php?page=Sec_Login" class="nav-cta">Iniciar sesión</a></li>
-        {{endif login}}
+        <li><a href="index.php?page=Sec_Login">Iniciar sesión</a></li>
       </ul>
     </div>
   </nav>

@@ -40,18 +40,3 @@
     </div>
   </div>
 </section>
-
-<section class="faq section-pad">
-  <div class="container">
-    <div class="text-center reveal">
-      <div class="section-label">Preguntas frecuentes</div>
-      <h2>¿Tienes dudas?</h2>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item reveal"><button class="faq-question">¿Cómo accedo al sistema SmartClinic?<span class="faq-arrow">▼</span></button><div class="faq-answer"><p>El acceso es mediante usuario y contraseña. Dirígete a <strong>Iniciar sesión</strong> en la barra de navegación y usa las credenciales que te proporcionó tu administrador.</p></div></div>
-      <div class="faq-item reveal reveal-delay-1"><button class="faq-question">¿Qué roles existen en la versión actual?<span class="faq-arrow">▼</span></button><div class="faq-answer"><p>En la v1.0 existen dos roles: <strong>Administrador</strong> y <strong>Recepción</strong>.</p></div></div>
-      <div class="faq-item reveal reveal-delay-2"><button class="faq-question">¿Qué necesito para ejecutar SmartClinic?<span class="faq-arrow">▼</span></button><div class="faq-answer"><p>Solo necesitas montar el proyecto con PHP y MySQL. Si usas Docker, también puedes desplegarlo con contenedores.</p></div></div>
-      <div class="faq-item reveal reveal-delay-3"><button class="faq-question">¿Puedo ver el código fuente del proyecto?<span class="faq-arrow">▼</span></button><div class="faq-answer"><p>Sí. El código está disponible en el repositorio de GitHub del proyecto académico.</p></div></div>
-    </div>
-  </div>
-</section>

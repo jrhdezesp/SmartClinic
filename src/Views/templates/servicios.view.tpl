@@ -15,12 +15,9 @@
     </div>
 
     <div class="servicios-grid">
-      <div class="servicio-card reveal"><div class="servicio-icon">🔐</div><h3>Autenticación con roles</h3><p>Inicio de sesión seguro con roles restrictivos para Administrador y Recepción.</p><span class="badge badge--blue">v1.0 disponible</span></div>
-      <div class="servicio-card reveal reveal-delay-1"><div class="servicio-icon">📋</div><h3>CRUD de pacientes</h3><p>Registro, edición, búsqueda y eliminación de perfiles de pacientes con sus datos básicos.</p><span class="badge badge--green">v1.0 disponible</span></div>
-      <div class="servicio-card reveal reveal-delay-2"><div class="servicio-icon">👨‍⚕️</div><h3>CRUD de médicos</h3><p>Gestión completa de perfiles médicos: nombre, especialidad, horarios y estado.</p><span class="badge badge--blue">v1.0 disponible</span></div>
-      <div class="servicio-card reveal"><div class="servicio-icon">📅</div><h3>Gestión de citas</h3><p>Creación, modificación y cancelación de citas con validación automática de horarios.</p><span class="badge badge--amber">v1.0 disponible</span></div>
-      <div class="servicio-card reveal reveal-delay-1"><div class="servicio-icon">📊</div><h3>Dashboard de métricas</h3><p>Panel de control con resumen de citas del día, médicos activos y pacientes registrados.</p><span class="badge badge--blue">v1.0 disponible</span></div>
-      <div class="servicio-card reveal reveal-delay-2"><div class="servicio-icon">⚙️</div><h3>Configuración del sistema</h3><p>Pantalla de datos globales de la clínica y parámetros generales de configuración.</p><span class="badge badge--green">v1.0 disponible</span></div>
+      <div class="servicio-card reveal"><div class="servicio-icon">📋</div><h3>CRUD de pacientes</h3><p>Registro, edición, búsqueda y eliminación de perfiles de pacientes con sus datos básicos.</p><span class="badge badge--green">v1.0 disponible</span></div>
+      <div class="servicio-card reveal reveal-delay-1"><div class="servicio-icon">👨‍⚕️</div><h3>CRUD de médicos</h3><p>Gestión completa de perfiles médicos: nombre, especialidad, horarios y estado.</p><span class="badge badge--blue">v1.0 disponible</span></div>
+      <div class="servicio-card reveal reveal-delay-2"><div class="servicio-icon">📅</div><h3>Gestión de citas</h3><p>Creación, modificación y cancelación de citas con validación automática de horarios.</p><span class="badge badge--amber">v1.0 disponible</span></div>
     </div>
   </div>
 </section>

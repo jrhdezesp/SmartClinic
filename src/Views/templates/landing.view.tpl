@@ -48,9 +48,6 @@
       <div class="fcard reveal"><div class="fcard-icon">📋</div><h3>Registro de pacientes</h3><p>Crea, edita y consulta expedientes de pacientes de manera rápida y segura desde recepción.</p><div style="margin-top:14px;"><span class="badge badge--blue">CRUD Pacientes</span></div></div>
       <div class="fcard reveal reveal-delay-1"><div class="fcard-icon">👨‍⚕️</div><h3>Directorio de médicos</h3><p>Gestiona los perfiles médicos, especialidades y horarios disponibles para agendar citas.</p><div style="margin-top:14px;"><span class="badge badge--blue">CRUD Médicos</span></div></div>
       <div class="fcard reveal reveal-delay-2"><div class="fcard-icon">📅</div><h3>Gestión de citas</h3><p>Agenda, modifica y cancela citas con validación automática para evitar conflictos de horario.</p><div style="margin-top:14px;"><span class="badge badge--blue">Agenda v1.0</span></div></div>
-      <div class="fcard reveal"><div class="fcard-icon">🔒</div><h3>Control de acceso</h3><p>Roles diferenciados para Administrador y Recepción. Cada usuario ve solo lo que le corresponde.</p><div style="margin-top:14px;"><span class="badge badge--blue">Roles v1.0</span></div></div>
-      <div class="fcard reveal reveal-delay-1"><div class="fcard-icon">📊</div><h3>Dashboard operativo</h3><p>Panel de métricas con citas del día, médicos disponibles y resumen de actividad de la clínica.</p><div style="margin-top:14px;"><span class="badge badge--blue">Admin Panel</span></div></div>
-      <div class="fcard reveal reveal-delay-2"><div class="fcard-icon">🐳</div><h3>Despliegue con Docker</h3><p>El sistema corre en contenedores Docker para garantizar consistencia entre desarrollo y producción.</p><div style="margin-top:14px;"><span class="badge badge--blue">DevOps</span></div></div>
     </div>
   </div>
 </section>

@@ -112,8 +112,9 @@ class CitasController extends PublicController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pacienteId = intval($_POST['paciente_id'] ?? 0);
             $medicoId = intval($_POST['medico_id'] ?? 0);
-            $fecha = trim(strval($_POST['fecha'] ?? ''));
+            $fecha = $this->normalizeDate(trim(strval($_POST['fecha'] ?? '')));
             $hora = trim(strval($_POST['hora'] ?? ''));
+            $fecha = $this->forceYmdFormat($fecha);
             $fechaHora = $fecha && $hora ? $fecha . 'T' . $hora : '';
 
             $defaults['paciente_id'] = $pacienteId;
@@ -182,8 +183,9 @@ class CitasController extends PublicController
             $pacienteId = intval($_POST['paciente_id'] ?? 0);
             $medicoId = intval($_POST['medico_id'] ?? 0);
             $estadoId = intval($_POST['estado_id'] ?? 1);
-            $fecha = trim(strval($_POST['fecha'] ?? ''));
+            $fecha = $this->normalizeDate(trim(strval($_POST['fecha'] ?? '')));
             $hora = trim(strval($_POST['hora'] ?? ''));
+            $fecha = $this->forceYmdFormat($fecha);
             $fechaHora = $fecha && $hora ? $fecha . 'T' . $hora : '';
 
             $errorMessage = $this->validateCita($pacienteId, $medicoId, $fechaHora, $id);
@@ -316,10 +318,10 @@ class CitasController extends PublicController
             return 'El médico seleccionado no existe.';
         }
 
-        $fechaHora = \DateTime::createFromFormat('Y-m-d\TH:i', $fechaHoraRaw);
-        $errors = \DateTime::getLastErrors();
-        if (!$fechaHora || !is_array($errors) || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
-            return 'Fecha y hora inválidas.';
+        $fechaHora = $this->parseFechaHora($fechaHoraRaw);
+        if (!$fechaHora) {
+            error_log("CitasController::validateCita - fechaHoraRaw recibido: '" . $fechaHoraRaw . "'");
+            return 'Fecha y hora inválidas. Recibido: ' . htmlspecialchars($fechaHoraRaw) . ' — Formato esperado: YYYY-MM-DDTHH:MM';
         }
 
         $now = new \DateTime();
@@ -439,5 +441,115 @@ class CitasController extends PublicController
             Site::redirectTo('index.php?page=CitasController&action=index');
             exit;
         }
+    }
+
+    private function parseFechaHora(string $fechaHoraRaw): ?\DateTime
+    {
+        $fechaHoraRaw = trim($fechaHoraRaw);
+        if ($fechaHoraRaw === '') {
+            return null;
+        }
+
+        try {
+            $dt = new \DateTime($fechaHoraRaw);
+            if ($dt->format('Y') > 1970) {
+                return $dt;
+            }
+        } catch (\Exception $e) {
+        }
+
+        // Formatos manuales para casos no estándar (d/m/Y, etc.)
+        $formatos = [
+            'Y-m-d\TH:i',    // 2026-06-08T07:30
+            'Y-m-d H:i',     // 2026-06-08 07:30
+            'Y-m-d\TH:i:s',  // 2026-06-08T07:30:00
+            'Y-m-d H:i:s',   // 2026-06-08 07:30:00
+            'd/m/Y\TH:i',    // 08/06/2026T07:30
+            'd/m/Y H:i',     // 08/06/2026 07:30
+            'd/m/Y\TH:i:s',  // 08/06/2026T07:30:00
+            'd/m/Y H:i:s',   // 08/06/2026 07:30:00
+            'd-m-Y\TH:i',    // 08-06-2026T07:30
+            'd-m-Y H:i',     // 08-06-2026 07:30
+            'd-m-Y\TH:i:s',  // 08-06-2026T07:30:00
+            'd-m-Y H:i:s',   // 08-06-2026 07:30:00
+            'j/n/Y\TH:i',    // 8/6/2026T07:30
+            'j/n/Y H:i',     // 8/6/2026 07:30
+            'j-n-Y\TH:i',    // 8-6-2026T07:30
+            'j-n-Y H:i',     // 8-6-2026 07:30
+        ];
+
+        foreach ($formatos as $formato) {
+            \DateTime::getLastErrors(); // reset
+            $fechaHora = \DateTime::createFromFormat($formato, $fechaHoraRaw);
+            $errors = \DateTime::getLastErrors();
+            if ($fechaHora && is_array($errors) && $errors['error_count'] === 0) {
+                return $fechaHora;
+            }
+        }
+
+        if (strpos($fechaHoraRaw, 'T') !== false || strpos($fechaHoraRaw, ' ') !== false) {
+            $partes = preg_split('/[T\s]/', $fechaHoraRaw, 2);
+            if (count($partes) === 2) {
+                $fechaParte = trim($partes[0]);
+                $horaParte = trim($partes[1]);
+                $formatosFecha = ['Y-m-d', 'd/m/Y', 'd-m-Y', 'j/n/Y', 'j-n-Y'];
+                foreach ($formatosFecha as $fmt) {
+                    \DateTime::getLastErrors();
+                    $dt = \DateTime::createFromFormat($fmt, $fechaParte);
+                    $errors = \DateTime::getLastErrors();
+                    if ($dt && is_array($errors) && $errors['error_count'] === 0) {
+                        $horaLimpia = substr($horaParte, 0, 5); // HH:MM
+                        $combinada = $dt->format('Y-m-d') . 'T' . $horaLimpia;
+                        \DateTime::getLastErrors();
+                        $dt2 = \DateTime::createFromFormat('Y-m-d\TH:i', $combinada);
+                        $errors2 = \DateTime::getLastErrors();
+                        if ($dt2 && is_array($errors2) && $errors2['error_count'] === 0) {
+                            return $dt2;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function normalizeDate(string $fecha): string
+    {
+        if ($fecha === '') {
+            return '';
+        }
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
+            return $fecha;
+        }
+        // Intentar parsear formatos d/m/Y o d-m-Y
+        $formatos = ['d/m/Y', 'd-m-Y'];
+        foreach ($formatos as $formato) {
+            $dt = \DateTime::createFromFormat($formato, $fecha);
+            $errors = \DateTime::getLastErrors();
+            if ($dt && is_array($errors) && $errors['warning_count'] === 0 && $errors['error_count'] === 0) {
+                return $dt->format('Y-m-d');
+            }
+        }
+        return $fecha;
+    }
+
+    private function forceYmdFormat(string $fecha): string
+    {
+        if ($fecha === '') {
+            return '';
+        }
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
+            return $fecha;
+        }
+        $formatos = ['d/m/Y', 'd-m-Y'];
+        foreach ($formatos as $formato) {
+            $dt = \DateTime::createFromFormat($formato, $fecha);
+            $errors = \DateTime::getLastErrors();
+            if ($dt && is_array($errors) && $errors['warning_count'] === 0 && $errors['error_count'] === 0) {
+                return $dt->format('Y-m-d');
+            }
+        }
+        return $fecha;
     }
 }

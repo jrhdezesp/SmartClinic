@@ -39,7 +39,7 @@ class Perfil extends PrivateController
 
     private function processProfileUpdate(int $userId): void
     {
-        $newName = trim($_POST['userNombre'] ?? '');
+        $newName = \Utilities\Validators::sanitizeString($_POST['userNombre'] ?? '');
 
         if (\Utilities\Validators::IsEmpty($newName)) {
             $this->profileError = 'El nombre no puede quedar vacío';

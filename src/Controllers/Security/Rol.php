@@ -58,7 +58,7 @@ class Rol extends PrivateController
     private function getData(): void
     {
         // Carga datos de rol segaUn modo de operacion
-        $this->mode = $_GET["mode"] ?? "NOF";
+        $this->mode = \Utilities\Validators::sanitizeAlphaNum($_GET["mode"] ?? "NOF");
 
         if (!isset($this->modeDescriptions[$this->mode])) {
             throw new \Exception("Modo inválido");
@@ -68,7 +68,11 @@ class Rol extends PrivateController
         $this->showCommitBtn = $this->mode !== "DSP";
 
         if ($this->mode !== "INS") {
-            $rolData = DaoRoles::getRoleById($_GET["id"]);
+            $id = \Utilities\Validators::sanitizeAlphaNum($_GET["id"] ?? "");
+            if ($id === "") {
+                throw new \Exception("ID de rol inválido");
+            }
+            $rolData = DaoRoles::getRoleById($id);
             if (!$rolData) {
                 throw new \Exception("Rol no encontrado");
             }
@@ -85,15 +89,15 @@ class Rol extends PrivateController
         // Valida campos requeridos del rol
         $errors = [];
 
-        $this->rol["rolescod"] = trim($_POST["rolescod"] ?? "");
-        $this->originalRolescod = trim($_POST["rolescod_original"] ?? $this->originalRolescod);
-        $this->rol["rolesdsc"] = trim($_POST["rolesdsc"] ?? "");
-        $this->rol["rolesest"] = $_POST["rolesest"] ?? "ACT";
+        $this->rol["rolescod"] = \Utilities\Validators::sanitizeAlphaNum($_POST["rolescod"] ?? "");
+        $this->originalRolescod = \Utilities\Validators::sanitizeAlphaNum($_POST["rolescod_original"] ?? $this->originalRolescod);
+        $this->rol["rolesdsc"] = \Utilities\Validators::sanitizeString($_POST["rolesdsc"] ?? "");
+        $this->rol["rolesest"] = \Utilities\Validators::sanitizeAlphaNum($_POST["rolesest"] ?? "ACT");
 
-        if (Validators::IsEmpty($this->rol["rolescod"])) {
+        if (\Utilities\Validators::IsEmpty($this->rol["rolescod"])) {
             $errors["rolescod_error"] = "Código de rol requerido";
         }
-        if (Validators::IsEmpty($this->rol["rolesdsc"])) {
+        if (\Utilities\Validators::IsEmpty($this->rol["rolesdsc"])) {
             $errors["rolesdsc_error"] = "Descripción requerida";
         }
         if (!in_array($this->rol["rolesest"], ["ACT", "INA"])) {

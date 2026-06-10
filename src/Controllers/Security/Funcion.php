@@ -55,7 +55,7 @@ class Funcion extends PrivateController
     // =============================
     private function getData(): void
     {
-        $this->mode = $_GET["mode"] ?? "NOF";
+        $this->mode = \Utilities\Validators::sanitizeAlphaNum($_GET["mode"] ?? "NOF");
         // Carga datos base segaUn modo y codigo solicitado
         if (!isset($this->modeDescriptions[$this->mode])) {
             throw new \Exception("Modo inválido");
@@ -64,7 +64,11 @@ class Funcion extends PrivateController
         $this->showCommitBtn = $this->mode !== "DSP";
 
         if ($this->mode !== "INS") {
-            $funcionData = DaoFunciones::getFuncionById($_GET["id"]);
+            $id = \Utilities\Validators::sanitizeAlphaNum($_GET["id"] ?? "");
+            if ($id === "") {
+                throw new \Exception("ID de función inválido");
+            }
+            $funcionData = DaoFunciones::getFuncionById($id);
             if (!$funcionData) {
                 throw new \Exception("Función no encontrada");
             }
@@ -80,16 +84,16 @@ class Funcion extends PrivateController
     {
         $errors = [];
         // Valida campos requeridos del formulario
-        $this->funcion["fncod"] = trim($_POST["fncod"] ?? "");
-        $this->originalFncod = trim($_POST["fncod_original"] ?? $this->originalFncod);
-        $this->funcion["fndsc"] = trim($_POST["fndsc"] ?? "");
-        $this->funcion["fnest"] = $_POST["fnest"] ?? "ACT";
-        $this->funcion["fntyp"] = $_POST["fntyp"] ?? "FNC";
+        $this->funcion["fncod"] = \Utilities\Validators::sanitizeAlphaNum($_POST["fncod"] ?? "");
+        $this->originalFncod = \Utilities\Validators::sanitizeAlphaNum($_POST["fncod_original"] ?? $this->originalFncod);
+        $this->funcion["fndsc"] = \Utilities\Validators::sanitizeString($_POST["fndsc"] ?? "");
+        $this->funcion["fnest"] = \Utilities\Validators::sanitizeAlphaNum($_POST["fnest"] ?? "ACT");
+        $this->funcion["fntyp"] = \Utilities\Validators::sanitizeAlphaNum($_POST["fntyp"] ?? "FNC");
 
-        if (Validators::IsEmpty($this->funcion["fncod"])) {
+        if (\Utilities\Validators::IsEmpty($this->funcion["fncod"])) {
             $errors["fncod_error"] = "Código de función requerido";
         }
-        if (Validators::IsEmpty($this->funcion["fndsc"])) {
+        if (\Utilities\Validators::IsEmpty($this->funcion["fndsc"])) {
             $errors["fndsc_error"] = "Descripción requerida";
         }
         if (!in_array($this->funcion["fnest"], ["ACT", "INA"])) {

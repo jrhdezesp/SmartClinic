@@ -21,11 +21,11 @@ class Roles extends PrivateController
         // Lista roles con filtros, orden y paginacion
         try {
             // Obtener parametros de filtro y paginacion
-            $partialName = $_GET["partialName"] ?? "";
-            $status = $_GET["status"] ?? "";
+            $partialName = \Utilities\Validators::sanitizeString($_GET["partialName"] ?? "");
+            $status = \Utilities\Validators::sanitizeAlphaNum($_GET["status"] ?? "");
             $orderBy = $this->getOrderBy();
             $orderDescending = $this->getOrderDescending();
-            $pageNum = max(1, intval($_GET["pageNum"] ?? 1));
+            $pageNum = \Utilities\Validators::sanitizeInt($_GET["pageNum"] ?? 1, 1) ?? 1;
             $page = $pageNum - 1;
             $itemsPerPage = 10;
 

@@ -297,7 +297,38 @@ VALUES (
         'ACT',
         CURRENT_TIMESTAMP,
         '2099-12-31 23:59:59'
-    );
+    ),
+    (17, 16, 1, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59'),
+    (18, 17, 1, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59');
+
+INSERT IGNORE INTO
+    funciones (funcionId, funcionNombre, funcionDescripcion, funcionStatus)
+VALUES
+    (8, 'Menu_Dashboard', 'Acceso al Panel/Dashboard', 'ACT'),
+    (9, 'Menu_Medicos', 'Acceso al menú Médicos', 'ACT'),
+    (10, 'Menu_Pacientes', 'Acceso al menú Pacientes', 'ACT'),
+    (11, 'Menu_Citas', 'Acceso al menú Citas', 'ACT'),
+    (12, 'Menu_Profile', 'Acceso al Perfil', 'ACT'),
+    (13, 'MedicosController', 'Controlador CRUD Médicos', 'ACT'),
+    (14, 'PacientesController', 'Controlador CRUD Pacientes', 'ACT'),
+    (15, 'CitasController', 'Controlador CRUD Citas', 'ACT'),
+    (16, 'Menu_Users', 'Acceso al menú Usuarios', 'ACT'),
+    (17, 'Menu_Roles', 'Acceso al menú Roles', 'ACT');
+
+INSERT IGNORE INTO
+    funciones_roles (funcionRolId, funcionId, rolId, frStatus, frFechaInicio, frFechaFin)
+VALUES
+    (10, 8, 2, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59'),
+    (11, 9, 2, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59'),
+    (12, 10, 2, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59'),
+    (13, 11, 2, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59'),
+    (14, 12, 2, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59');
+
+INSERT IGNORE INTO
+    funciones_roles (funcionRolId, funcionId, rolId, frStatus, frFechaInicio, frFechaFin)
+VALUES
+    (15, 14, 2, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59'),
+    (16, 15, 2, 'ACT', CURRENT_TIMESTAMP, '2099-12-31 23:59:59');
 
 INSERT INTO
     especialidad (id, nombre_especialidad)
@@ -312,8 +343,11 @@ VALUES (1, 'Medicina General'),
 INSERT INTO
     estado_cita (id, nombre_estado)
 VALUES (1, 'Pendiente'),
-    (2, 'Cancelada'),
-    (3, 'Completada');
+    (2, 'Confirmada'),
+    (3, 'Completada'),
+    (4, 'Cancelada'),
+    (5, 'No Asistió')
+ON DUPLICATE KEY UPDATE nombre_estado = VALUES(nombre_estado);
 
 INSERT INTO
     paciente (

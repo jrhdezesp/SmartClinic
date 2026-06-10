@@ -131,7 +131,7 @@ SmartClinic/
 
 | Dashboard (Desktop) | Dashboard (Móvil) | Citas - Modo lectura |
 |---------------------|-------------------|----------------------|
-| ![Dashboard](public/img/Screenshots/Dashboard_Desktop.png) | ![Mobile](public/img/Screenshots/Dashboard_Mobile.png) | ![Readonly](public/img/Screenshots/Citas_ModoLectura.png) |
+| ![Dashboard](public/img/Screenshots/dashboard-desktop.png) | ![Mobile](public/img/Screenshots/dashboard-mobile.png) | ![Readonly](public/img/Screenshots/cita-modo-lectura.png) |
 
 ---
 

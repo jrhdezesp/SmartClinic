@@ -210,11 +210,8 @@ class HomeController extends PrivateController
     }
     public function calendarPartial(): void
     {
-        $mes = isset($_GET['mes']) ? intval($_GET['mes']) : intval(date('m'));
-        $anio = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
-
-        if ($mes < 1) { $mes = 12; $anio--; }
-        if ($mes > 12) { $mes = 1; $anio++; }
+        $mes = \Utilities\Validators::sanitizeInt($_GET['mes'] ?? 0, 1, 12) ?? intval(date('m'));
+        $anio = \Utilities\Validators::sanitizeInt($_GET['anio'] ?? 0, 2000, 2100) ?? intval(date('Y'));
 
         $citas = DaoCitas::getAllCitas();
         $citasPorFecha = [];
@@ -262,7 +259,10 @@ class HomeController extends PrivateController
 
     public function dayView(): void
     {
-        $fecha = isset($_GET['fecha']) ? trim($_GET['fecha']) : date('Y-m-d');
+        $fecha = \Utilities\Validators::sanitizeDate($_GET['fecha'] ?? '');
+        if ($fecha === null) {
+            $fecha = date('Y-m-d');
+        }
         
         $dt = \DateTime::createFromFormat('Y-m-d', $fecha);
         if (!$dt) {

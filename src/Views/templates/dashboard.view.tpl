@@ -1,24 +1,43 @@
 <style>
   .dashboard-shell {
     width: 100%;
-    max-width: 1120px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 2.5rem 1.5rem;
+    padding: 1.5rem 1.5rem;
     display: grid;
-    gap: 1.5rem;
+    gap: 1.25rem;
     min-width: 0;
+    box-sizing: border-box;
   }
   .hero-card {
     background: linear-gradient(135deg, #0b4bb8 0%, #0f6fe2 100%);
-    border-radius: 24px;
+    border-radius: 16px;
     color: #fff;
-    padding: 2rem;
+    padding: 1.5rem;
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 1.5rem;
     align-items: center;
     overflow: hidden;
     min-width: 0;
+  }
+  @media (max-width: 980px) {
+    .hero-card {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .hero-card > div:last-child {
+      order: -1;
+      margin-bottom: 1rem;
+    }
+    .hero-actions {
+      justify-content: center;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero-card {
+      padding: 1.25rem;
+    }
   }
   .hero-card h1 {
     font-size: 2.4rem;
@@ -53,14 +72,15 @@
   }
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.875rem;
   }
   .stat-card {
     background: #fff;
-    border-radius: 20px;
-    padding: 1.6rem;
-    box-shadow: 0 14px 35px rgba(3,59,159,0.08);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 8px 24px rgba(3,59,159,0.08);
+    min-width: 0;
   }
   .stat-card .label {
     display: flex;
@@ -139,9 +159,15 @@
   }
   .card-panel {
     background: #fff;
-    border-radius: 22px;
-    padding: 1.4rem;
-    box-shadow: 0 12px 30px rgba(3,59,159,0.06);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 8px 24px rgba(3,59,159,0.06);
+    min-width: 0;
+  }
+  @media (max-width: 980px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
   }
   .card-panel h3 {
     font-size: 1rem;
@@ -185,24 +211,26 @@
     width: 100%;
     border-collapse: collapse;
     min-width: 0;
+    table-layout: fixed;
   }
   .table-simple th,
   .table-simple td {
-    padding: 1rem 1rem;
+    padding: 0.75rem 0.5rem;
     text-align: left;
     border-bottom: 1px solid #e2e8f0;
     white-space: normal;
     word-break: break-word;
+    overflow-wrap: anywhere;
   }
   .table-simple th {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     color: #64748b;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
   }
   .table-simple td {
     color: #334155;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
   }
   .badge-pill {
     display: inline-flex;
@@ -264,15 +292,17 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
+    min-width: 0;
   }
   .calendar-day-name {
     text-align: center;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     font-weight: 700;
     color: var(--sc-gray-500);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.35rem 0;
+    letter-spacing: 0.03em;
+    padding: 0.25rem 0;
+    white-space: nowrap;
   }
   .calendar-day {
     aspect-ratio: 1;
@@ -280,16 +310,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 0.25rem 0.15rem;
+    padding: 0.2rem 0.1rem;
     border-radius: var(--sc-radius-sm);
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: var(--sc-gray-900);
     background: transparent;
     cursor: pointer;
     transition: all var(--sc-transition);
     position: relative;
-    min-height: 56px;
+    min-height: 48px;
     text-decoration: none;
+    min-width: 0;
+    overflow: hidden;
   }
   .calendar-day:hover {
     background: var(--sc-blue-50);
@@ -389,30 +421,44 @@
 
   @media (max-width: 980px) {
     .calendar-day {
-      min-height: 60px;
-      font-size: 0.65rem;
-      padding: 0.2rem 0.1rem;
+      min-height: 52px;
+      font-size: 0.55rem;
+      padding: 0.15rem 0.05rem;
     }
     .calendar-event {
+      font-size: 0.45rem;
+      padding: 1px 2px;
+    }
+    .calendar-day-name {
       font-size: 0.5rem;
-      padding: 1px 3px;
+      padding: 0.2rem 0;
     }
   }
   @media (max-width: 640px) {
     .calendar-day {
-      min-height: 52px;
-      font-size: 0.6rem;
+      min-height: 44px;
+      font-size: 0.5rem;
+      padding: 0.1rem 0.05rem;
+    }
+    .calendar-event {
+      font-size: 0.4rem;
+      padding: 0.5px 2px;
     }
     .calendar-header {
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
     .calendar-nav {
       align-self: flex-end;
     }
     .calendar-legend {
       justify-content: center;
+    }
+    .calendar-nav-btn {
+      width: 28px;
+      height: 28px;
+      font-size: 0.8rem;
     }
   }
 
@@ -432,51 +478,137 @@
     }
   }
   @media (max-width: 640px) {
+    .dashboard-shell { padding: 1rem 0.75rem; gap: 1rem; }
+    .hero-card { padding: 1.25rem; border-radius: 16px; grid-template-columns: 1fr; }
+    .hero-card h1 { font-size: 1.75rem; }
+    .hero-card p { font-size: 0.875rem; }
+    .hero-actions { gap: 0.5rem; }
+    .hero-actions a { padding: 0.7rem 1rem; font-size: 0.875rem; }
+    .stats-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+    .stat-card { padding: 1.25rem; border-radius: 16px; }
+    .stat-card .value { font-size: 1.75rem; }
+    .section-head { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .card-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .action-buttons { flex-direction: column; align-items: stretch; }
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; }
+    .table-simple { min-width: auto; width: 100%; table-layout: fixed; }
+    .table-simple th, .table-simple td { padding: 0.5rem 0.375rem; font-size: 0.75rem; }
+    .card-panel { padding: 1rem; border-radius: 16px; }
+    .card-panel h2 { font-size: 1rem; }
+    .calendar-day-name { font-size: 0.5rem; padding: 0.2rem 0; }
+    .calendar-day { min-height: 44px; font-size: 0.5rem; padding: 0.1rem 0.05rem; }
+    .calendar-event { font-size: 0.4rem; padding: 0.5px 2px; }
+    .calendar-nav-btn { width: 28px; height: 28px; font-size: 0.75rem; }
+    .calendar-title { font-size: 0.8rem; }
+    .legend-item { font-size: 0.5rem; }
+    .legend-dot { width: 6px; height: 6px; }
+    .hero-card { padding: 1.25rem; border-radius: 16px; }
+    .hero-card h1 { font-size: 1.5rem; }
+    .hero-card p { font-size: 0.8rem; }
+    .hero-actions a { padding: 0.6rem 0.875rem; font-size: 0.8rem; }
+  @media (max-width: 480px) {
     .dashboard-shell {
-      padding: 1.5rem 1rem;
+      padding: 1rem 0.75rem;
+      gap: 1rem;
     }
     .hero-card {
-      gap: 1rem;
-      padding: 1.5rem;
-      grid-template-columns: 1fr;
+      padding: 1.25rem;
+      border-radius: 16px;
     }
     .hero-card h1 {
-      font-size: 2rem;
+      font-size: 1.75rem;
     }
     .hero-card p {
-      font-size: 0.95rem;
-      max-width: 100%;
+      font-size: 0.875rem;
     }
     .hero-actions {
-      flex-direction: column;
-      align-items: stretch;
+      gap: 0.5rem;
     }
     .hero-actions a {
-      width: 100%;
-      justify-content: center;
-    }
-    .section-head {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-    .card-grid {
-      grid-template-columns: 1fr;
+      padding: 0.7rem 1rem;
+      font-size: 0.875rem;
     }
     .stats-grid {
-      grid-template-columns: 1fr;
+      gap: 0.75rem;
     }
-    .action-buttons {
-      flex-direction: column;
-      align-items: stretch;
+    .stat-card {
+      padding: 1.25rem;
+      border-radius: 16px;
+    }
+    .stat-card .value {
+      font-size: 1.75rem;
+    }
+    .stat-card .label {
+      font-size: 0.7rem;
+    }
+    .summary-link {
+      font-size: 0.75rem;
+      padding: 0.5rem 0.5rem;
+    }
+    .section-head h2 {
+      font-size: 1.25rem;
+    }
+    .card-panel {
+      padding: 1rem;
+      border-radius: 16px;
+    }
+    .card-panel h2 {
+      font-size: 1.1rem;
     }
     .table-simple th,
     .table-simple td {
-      padding: 0.85rem;
-      font-size: 0.9rem;
+      padding: 0.65rem 0.5rem;
+      font-size: 0.85rem;
     }
-    .card-panel {
-      padding: 1.2rem;
+    .calendar-day-name {
+      font-size: 0.55rem;
+      padding: 0.25rem 0;
+    }
+    .calendar-day {
+      min-height: 48px;
+      font-size: 0.55rem;
+      padding: 0.15rem 0.1rem;
+    }
+    .calendar-event {
+      font-size: 0.5rem;
+      padding: 1px 3px;
+    }
+    .calendar-nav-btn {
+      width: 28px;
+      height: 28px;
+      font-size: 0.85rem;
+    }
+    .calendar-title {
+      font-size: 0.85rem;
+    }
+    .legend-item {
+      font-size: 0.55rem;
+    }
+    .legend-dot {
+      width: 6px;
+      height: 6px;
+    }
+    .hero-card {
+      padding: 1.25rem;
+    }
+    .hero-card h1 {
+      font-size: 1.75rem;
+    }
+    .hero-card p {
+      font-size: 0.875rem;
+    }
+    .hero-actions a {
+      padding: 0.7rem 1rem;
+      font-size: 0.875rem;
+    }
+    .hero-card > div:last-child {
+      max-width: 280px;
+    }
+  }
+  @media (max-width: 480px) {
+    .hero-card > div:last-child {
+      display: none;
     }
   }
 </style>

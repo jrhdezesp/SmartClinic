@@ -7,3 +7,5 @@ data
 docs/manual_tecnico
 composer.lock
 phpdoc.dist.xml
+.env
+logs

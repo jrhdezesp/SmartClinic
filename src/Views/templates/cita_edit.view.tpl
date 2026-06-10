@@ -94,8 +94,9 @@
     function refreshTimes() {
       if (!medicoSelect || !fechaInput || !horaSelect) return;
       if (!medicoSelect.value || !fechaInput.value) return;
+    var currentCitaId = new URLSearchParams(window.location.search).get('id') || '';
 
-      fetch('index.php?page=CitasController&action=availableTimes&medico_id=' + encodeURIComponent(medicoSelect.value) + '&fecha=' + encodeURIComponent(fechaInput.value))
+        fetch('index.php?page=CitasController&action=availableTimes&medico_id=' + encodeURIComponent(medicoSelect.value) + '&fecha=' + encodeURIComponent(fechaInput.value) + '&exclude_id=' + encodeURIComponent(currentCitaId))
         .then(function (response) { return response.json(); })
         .then(function (data) {
           var currentValue = horaSelect.value;

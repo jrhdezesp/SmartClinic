@@ -81,6 +81,11 @@ class CitasController extends PublicController
             });
         }
 
+        // Ordenar citas por fecha y hora ascendente (más antiguas primero)
+        usort($citas, function ($a, $b) {
+            return strtotime($a['fecha_hora'] ?? '') - strtotime($b['fecha_hora'] ?? '');
+        });
+
         $this->viewData['citas'] = array_values($citas);
         $this->viewData['canManageCitas'] = $canManageCitas;
         $this->viewData['showCrudActions'] = $showCrudActions;
@@ -116,44 +121,44 @@ class CitasController extends PublicController
             $medicoId = \Utilities\Validators::sanitizeId($_POST['medico_id'] ?? 0);
             $fecha = \Utilities\Validators::sanitizeDate($_POST['fecha'] ?? '');
             $hora = \Utilities\Validators::sanitizeTime($_POST['hora'] ?? '');
-            
+
             if ($pacienteId === null || $medicoId === null || $fecha === null || $hora === null) {
                 $errorMessage = 'Datos inválidos. Verifique los campos.';
             } else {
                 $fecha = $this->forceYmdFormat($fecha);
                 $fechaHora = $fecha && $hora ? $fecha . 'T' . $hora : '';
 
-            $defaults['paciente_id'] = $pacienteId;
-            $defaults['medico_id'] = $medicoId;
-            $defaults['fecha'] = $fecha;
-            $defaults['hora'] = $hora;
-            $defaults['timeOptions'] = $this->getTimeOptions($hora, $medicoId, $fecha);
+                $defaults['paciente_id'] = $pacienteId;
+                $defaults['medico_id'] = $medicoId;
+                $defaults['fecha'] = $fecha;
+                $defaults['hora'] = $hora;
+                $defaults['timeOptions'] = $this->getTimeOptions($hora, $medicoId, $fecha);
 
-            $errorMessage = $this->validateCita($pacienteId, $medicoId, $fechaHora);
-            if ($errorMessage !== null) {
-                foreach ($medicos as &$medicoItem) {
-                    $medicoItem['selected'] = intval($medicoItem['id']) === $medicoId;
+                $errorMessage = $this->validateCita($pacienteId, $medicoId, $fechaHora);
+                if ($errorMessage !== null) {
+                    foreach ($medicos as &$medicoItem) {
+                        $medicoItem['selected'] = intval($medicoItem['id']) === $medicoId;
+                    }
+                    unset($medicoItem);
+
+                    foreach ($pacientes as &$pacienteItem) {
+                        $pacienteItem['selected'] = intval($pacienteItem['id']) === $pacienteId;
+                    }
+                    unset($pacienteItem);
+
+                    Renderer::render('cita_agendar', array_merge($defaults, [
+                        'medicos' => $medicos,
+                        'pacientes' => $pacientes,
+                        'error' => $errorMessage,
+                    ]));
+
+                    return;
                 }
-                unset($medicoItem);
 
-                foreach ($pacientes as &$pacienteItem) {
-                    $pacienteItem['selected'] = intval($pacienteItem['id']) === $pacienteId;
-                }
-                unset($pacienteItem);
-
-                Renderer::render('cita_agendar', array_merge($defaults, [
-                    'medicos' => $medicos,
-                    'pacientes' => $pacientes,
-                    'error' => $errorMessage,
-                ]));
-
-                return;
+                DaoCitas::insertCita($pacienteId, $medicoId, 1, $fechaHora);
+                Site::redirectTo('index.php?page=CitasController&action=index&success=1');
+                exit;
             }
-
-            DaoCitas::insertCita($pacienteId, $medicoId, 1, $fechaHora);
-            Site::redirectTo('index.php?page=CitasController&action=index&success=1');
-            exit;
-        }
         }
 
         Renderer::render('cita_agendar', array_merge($defaults, [
@@ -163,7 +168,7 @@ class CitasController extends PublicController
     }
 
     private const ALLOWED_TRANSITIONS = [
-        1 => [2, 4], 
+        1 => [2, 4],
         2 => [3, 4, 5],
     ];
 
@@ -204,7 +209,7 @@ class CitasController extends PublicController
         $currentDateTime = new \DateTime();
         $citaDateTime = new \DateTime($cita['fecha_hora']);
         $esCitaPasada = $citaDateTime <= $currentDateTime;
-        
+
         $estadosFinales = [3, 4, 5];
         $esEstadoFinal = in_array(intval($cita['estado_id'] ?? 1), $estadosFinales);
         $modoLectura = $esCitaPasada || $esEstadoFinal;
@@ -212,13 +217,16 @@ class CitasController extends PublicController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $estadoActual = intval($cita['estado_id'] ?? 1);
             $nuevoEstadoId = \Utilities\Validators::sanitizeInt($_POST['estado_id'] ?? 1, 1, 5);
-            
+
             if ($nuevoEstadoId !== null && $estadoActual !== $nuevoEstadoId) {
                 $transicionesPermitidas = self::ALLOWED_TRANSITIONS[$estadoActual] ?? [];
                 if (!in_array($nuevoEstadoId, $transicionesPermitidas)) {
                     $nombresEstados = [
-                        1 => 'Pendiente', 2 => 'Confirmada', 3 => 'Completada', 
-                        4 => 'Cancelada', 5 => 'No Asistió'
+                        1 => 'Pendiente',
+                        2 => 'Confirmada',
+                        3 => 'Completada',
+                        4 => 'Cancelada',
+                        5 => 'No Asistió'
                     ];
                     $errorMessage = "Transición de estado no permitida: de {$nombresEstados[$estadoActual]} a {$nombresEstados[$nuevoEstadoId]}";
                 }
@@ -236,49 +244,49 @@ class CitasController extends PublicController
                 $fecha = $this->forceYmdFormat($fecha);
                 $fechaHora = $fecha && $hora ? $fecha . 'T' . $hora : '';
 
-            $errorMessage = $this->validateCita($pacienteId, $medicoId, $fechaHora, $id);
-            if ($errorMessage !== null) {
-                $medicos = DaoMedicos::getAllMedicos();
-                foreach ($medicos as &$medicoItem) {
-                    $medicoItem['selected'] = intval($medicoItem['id']) === $medicoId;
+                $errorMessage = $this->validateCita($pacienteId, $medicoId, $fechaHora, $id);
+                if ($errorMessage !== null) {
+                    $medicos = DaoMedicos::getAllMedicos();
+                    foreach ($medicos as &$medicoItem) {
+                        $medicoItem['selected'] = intval($medicoItem['id']) === $medicoId;
+                    }
+                    unset($medicoItem);
+
+                    $pacientes = DaoPacientes::getAllPacientes();
+                    foreach ($pacientes as &$pacienteItem) {
+                        $pacienteItem['selected'] = intval($pacienteItem['id']) === $pacienteId;
+                    }
+                    unset($pacienteItem);
+
+                    $estados = [
+                        ['id' => 1, 'label' => 'Pendiente', 'selected' => $estadoId === 1],
+                        ['id' => 2, 'label' => 'Confirmada', 'selected' => $estadoId === 2],
+                        ['id' => 3, 'label' => 'Completada', 'selected' => $estadoId === 3],
+                        ['id' => 4, 'label' => 'Cancelada', 'selected' => $estadoId === 4],
+                        ['id' => 5, 'label' => 'No Asistió', 'selected' => $estadoId === 5],
+                    ];
+
+                    Renderer::render('cita_edit', [
+                        'cita_id' => $id,
+                        'fecha' => $fecha,
+                        'hora' => $hora,
+                        'medicos' => $medicos,
+                        'pacientes' => $pacientes,
+                        'estados' => $estados,
+                        'timeOptions' => $this->getTimeOptions($hora, $medicoId, $fecha, $id),
+                        'minDate' => $this->getMinDate(),
+                        'maxDate' => $this->getMaxDate(),
+                        'modo_lectura' => $modoLectura,
+                        'error' => $errorMessage,
+                    ]);
+
+                    return;
                 }
-                unset($medicoItem);
 
-                $pacientes = DaoPacientes::getAllPacientes();
-                foreach ($pacientes as &$pacienteItem) {
-                    $pacienteItem['selected'] = intval($pacienteItem['id']) === $pacienteId;
-                }
-                unset($pacienteItem);
-
-                $estados = [
-                    ['id' => 1, 'label' => 'Pendiente', 'selected' => $estadoId === 1],
-                    ['id' => 2, 'label' => 'Confirmada', 'selected' => $estadoId === 2],
-                    ['id' => 3, 'label' => 'Completada', 'selected' => $estadoId === 3],
-                    ['id' => 4, 'label' => 'Cancelada', 'selected' => $estadoId === 4],
-                    ['id' => 5, 'label' => 'No Asistió', 'selected' => $estadoId === 5],
-                ];
-
-                Renderer::render('cita_edit', [
-                    'cita_id' => $id,
-                    'fecha' => $fecha,
-                    'hora' => $hora,
-                    'medicos' => $medicos,
-                    'pacientes' => $pacientes,
-                    'estados' => $estados,
-                    'timeOptions' => $this->getTimeOptions($hora, $medicoId, $fecha, $id),
-                    'minDate' => $this->getMinDate(),
-                    'maxDate' => $this->getMaxDate(),
-                    'modo_lectura' => $modoLectura,
-                    'error' => $errorMessage,
-                ]);
-
-                return;
+                DaoCitas::updateCita($id, $pacienteId, $medicoId, $estadoId, $fechaHora);
+                Site::redirectTo('index.php?page=CitasController&action=index');
+                exit;
             }
-
-            DaoCitas::updateCita($id, $pacienteId, $medicoId, $estadoId, $fechaHora);
-            Site::redirectTo('index.php?page=CitasController&action=index');
-            exit;
-        }
         }
 
         $fecha = '';
@@ -286,21 +294,21 @@ class CitasController extends PublicController
         if ($cita && isset($cita['fecha_hora'])) {
             $rawFechaHora = $cita['fecha_hora'];
             $dt = null;
-            
+
             $formatos = [
                 'Y-m-d H:i:s',
                 'Y-m-d\TH:i:s',
                 'Y-m-d\TH:i',
                 'Y-m-d H:i',
             ];
-            
+
             foreach ($formatos as $formato) {
                 $dt = \DateTime::createFromFormat($formato, $rawFechaHora);
                 if ($dt !== false) {
                     break;
                 }
             }
-            
+
             if ($dt) {
                 $fecha = $dt->format('Y-m-d');
                 $hora = $dt->format('H:i');
@@ -360,6 +368,8 @@ class CitasController extends PublicController
     {
         $medicoId = \Utilities\Validators::sanitizeId($_GET['medico_id'] ?? 0);
         $fecha = \Utilities\Validators::sanitizeDate($_GET['fecha'] ?? '');
+        // Permite excluir la cita actual al editar (para que su hora no aparezca como ocupada)
+        $excludeId = \Utilities\Validators::sanitizeId($_GET['exclude_id'] ?? 0);
 
         if ($medicoId === null || $fecha === null) {
             header('Content-Type: application/json; charset=utf-8');
@@ -367,7 +377,7 @@ class CitasController extends PublicController
             exit;
         }
 
-        $timeOptions = $this->getTimeOptions('', $medicoId, $fecha);
+        $timeOptions = $this->getTimeOptions('', $medicoId, $fecha, $excludeId);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode(array_values(array_map(function ($option) {
             return ['value' => $option['value'], 'label' => $option['label']];
@@ -494,7 +504,7 @@ class CitasController extends PublicController
     private function getTimeOptions(string $selectedTime = '', int $medicoId = 0, string $date = '', int $excludeId = 0): array
     {
         $selectedTime = $this->normalizeTime($selectedTime);
-        
+
         $times = [];
 
         for ($hour = 7; $hour <= 11; $hour++) {
@@ -511,6 +521,9 @@ class CitasController extends PublicController
         if ($medicoId > 0 && $date !== '') {
             $blockedTimes = DaoCitas::getBookedTimeSlots($medicoId, $date, $excludeId);
         }
+
+        // Normalizar horarios bloqueados a formato HH:MM para comparación consistente
+        $blockedTimes = array_map(fn($t) => $this->normalizeTime($t), $blockedTimes);
 
         $options = [];
         foreach ($times as $time) {

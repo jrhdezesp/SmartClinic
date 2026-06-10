@@ -1,3 +1,5 @@
+{{-- Registro deshabilitado --}}
+{{-- 
 <section class="auth-page">
   <div class="auth-card">
     <a href="index.php?page=Landing" class="auth-brand">
@@ -40,3 +42,4 @@
 
   <a href="index.php?page=Landing" class="auth-back">← Volver al inicio</a>
 </section>
+--}}

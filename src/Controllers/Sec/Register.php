@@ -3,62 +3,13 @@
 namespace Controllers\Sec;
 
 use Controllers\PublicController;
-use \Utilities\Validators;
-use Exception;
 
 class Register extends PublicController
 {
-    private $txtEmail = "";
-    private $txtPswd = "";
-    private $errorEmail ="";
-    private $errorPswd = "";
-    private $generalError = "";
-    private $hasErrors = false;
     public function run() :void
     {
-        \Utilities\Context::setContext('layoutFile', 'authlayout');
-
-        if ($this->isPostBack()) {
-            $this->txtEmail = $_POST["txtEmail"];
-            $this->txtPswd = $_POST["txtPswd"];
-            //validaciones
-            if (!(Validators::IsValidEmail($this->txtEmail))) {
-                $this->errorEmail = "El correo no tiene el formato adecuado";
-                $this->hasErrors = true;
-            }
-            if (!Validators::IsValidPassword($this->txtPswd)) {
-                $this->errorPswd = "La contraseña debe tener al menos 8 caracteres una mayúscula, un número y un caracter especial.";
-                $this->hasErrors = true;
-            }
-
-            if (!$this->hasErrors) {
-                try {
-                    $existingUser = \Dao\Security\Security::getUsuarioByEmail($this->txtEmail);
-                    if ($existingUser) {
-                        $this->errorEmail = "El correo ya se encuentra registrado";
-                        $this->hasErrors = true;
-                    } else {
-                        if (\Dao\Security\Security::newUsuario($this->txtEmail, $this->txtPswd)) {
-                            \Utilities\Site::redirectToWithMsg("index.php?page=Sec_Login", "¡Usuario Registrado Satisfactoriamente!");
-                            return;
-                        }
-                        $this->generalError = "No fue posible registrar el usuario en este momento";
-                        $this->hasErrors = true;
-                    }
-                } catch (\PDOException $ex) {
-                    // Manejamos el duplicate key en caso de race condition y otros errores SQL
-                    if ($ex->getCode() === '23000') {
-                        $this->errorEmail = "El correo ya se encuentra registrado";
-                    } else {
-                        $this->generalError = "Ocurrió un error en el servidor. Intenta nuevamente.";
-                    }
-                } catch (\Exception $ex) {
-                    $this->generalError = $ex->getMessage();
-                }
-            }
-        }
-        $viewData = get_object_vars($this);
-        \Views\Renderer::render("security/sigin", $viewData);
+        // Registro deshabilitado: redirigir a login con mensaje
+        \Utilities\Site::redirectToWithMsg("index.php?page=Sec_Login", "El registro de nuevos usuarios está deshabilitado. Contacte a administración.");
     }
 }
 ?>

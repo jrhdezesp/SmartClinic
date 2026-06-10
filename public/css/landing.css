@@ -60,13 +60,24 @@
 .how-step:hover .how-num { background: var(--sc-blue-900); color: var(--sc-white); }
 .how-step h4 { margin-bottom: 4px; }
 .how-step p { font-size: 14px; }
-.how-visual { background: linear-gradient(135deg, var(--sc-blue-900), var(--sc-blue-500)); border-radius: var(--sc-radius-xl); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-.how-visual-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 24px; width: 100%; }
-.how-mini-card { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.15); border-radius: var(--sc-radius-md); padding: 16px 14px; color: var(--sc-white); font-size: 13px; font-weight: 500; display: flex; flex-direction: column; gap: 6px; }
-.how-mini-card .icon { font-size: 20px; }
+.how-visual { background: linear-gradient(135deg, var(--sc-blue-900), var(--sc-blue-500)); border-radius: var(--sc-radius-xl); aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.how-visual-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 28px; width: 100%; }
+.how-mini-card { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.15); border-radius: var(--sc-radius-md); padding: 20px 18px; color: var(--sc-white); font-size: 14px; font-weight: 500; display: flex; flex-direction: column; gap: 8px; }
+.how-mini-card .icon { font-size: 22px; }
 .cta-banner { background: linear-gradient(135deg, var(--sc-blue-900), var(--sc-blue-700)); padding: 72px 0; text-align: center; position: relative; overflow: hidden; }
 .cta-banner::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 32px 32px; }
 .cta-banner h2 { color: var(--sc-white); margin-bottom: 12px; position: relative; }
 .cta-banner p { color: rgba(255,255,255,.7); max-width: 480px; margin: 0 auto 32px; position: relative; }
 .cta-banner .btn { position: relative; }
-@media (max-width: 900px) { .hero-grid, .how-grid, .features-grid { grid-template-columns: 1fr; } .hero-visual { display: none; } }
+@media (max-width: 900px) { 
+  .hero-grid, .how-grid, .features-grid { grid-template-columns: 1fr; } 
+  .hero-visual { display: none; } 
+  .how-visual { aspect-ratio: auto; min-height: 280px; }
+  .how-visual-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .how-step { padding: 16px 0; gap: 16px; }
+  .how-num { width: 32px; height: 32px; font-size: 12px; }
+  .how-mini-card { padding: 14px 12px; font-size: 12px; }
+  .how-mini-card .icon { font-size: 18px; }
+}

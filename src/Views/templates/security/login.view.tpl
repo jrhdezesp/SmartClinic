@@ -37,7 +37,7 @@
         <button class="btn-primary" id="btnLogin" type="submit">Iniciar sesión</button>
       </div>
 
-      <p class="note">¿Aún no tienes cuenta? <a href="index.php?page=Sec_Register">Regístrate</a></p>
+      <p class="note">Si no tiene una cuenta o si olvidó su contraseña, póngase en contacto con administración.</p>
     </form>
   </div>
 

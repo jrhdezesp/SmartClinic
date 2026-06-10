@@ -76,16 +76,22 @@ class HomeController extends PrivateController
         $cal_semanas = $this->generarCalendarioSemanas($anioActual, $mesActual, $citasPorFecha, date('Y-m-d'));
         $diasEnMes = $this->diasEnMes($anioActual, $mesActual);
 
+        $totalPacientes = count(DaoPacientes::getAllPacientes());
+        $totalMedicos = count(DaoMedicos::getAllMedicos());
+        
+        $pacientesRecientes = array_slice(array_reverse(DaoPacientes::getAllPacientes()), 0, 5);
+        $medicosRecientes = array_slice(array_reverse(DaoMedicos::getAllMedicos()), 0, 5);
+
         $dataView = [
             'userName' => Security::getUser()['userName'] ?? 'Usuario',
             'fecha_hoy' => date('d/m/Y'),
-            'total_medicos' => count($medicos),
-            'total_pacientes' => count($pacientes),
+            'total_medicos' => count(DaoMedicos::getAllMedicos()),
+            'total_pacientes' => $totalPacientes,
             'total_citas' => count($citas),
             'citas_hoy' => $citasHoy,
             'citas_pendientes' => $citasPendientes,
-            'medicos' => array_slice($medicos, 0, 4),
-            'pacientes' => array_slice($pacientes, 0, 5),
+            'medicos' => $medicosRecientes,
+            'pacientes' => $pacientesRecientes,
             'citas' => array_slice($citas, 0, 5),
             'canManageMedicos' => $canManageMedicos,
             'canManagePacientes' => $canManagePacientes,

@@ -41,8 +41,8 @@ class MedicosController extends PublicController
 
     private function index(): void
     {
-        $search = trim(strval($_GET["search"] ?? ""));
-        $especialidad = trim(strval($_GET["especialidad"] ?? ""));
+        $search = \Utilities\Validators::sanitizeString($_GET["search"] ?? "");
+        $especialidad = \Utilities\Validators::sanitizeString($_GET["especialidad"] ?? "");
         $medicos = DaoMedicos::getAllMedicos();
 
         if ($search !== "" || $especialidad !== "") {
@@ -84,13 +84,25 @@ class MedicosController extends PublicController
         $this->authorizeCrud();
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $especialidadId = \Utilities\Validators::sanitizeId($_POST["especialidad_id"] ?? 0);
+            $nombres = \Utilities\Validators::sanitizeString($_POST["nombres"] ?? "");
+            $apellidos = \Utilities\Validators::sanitizeString($_POST["apellidos"] ?? "");
+            $numColegiatura = \Utilities\Validators::sanitizeString($_POST["num_colegiatura"] ?? "");
+            $telefono = \Utilities\Validators::sanitizeString($_POST["telefono"] ?? "");
+
+            if ($especialidadId === null || $nombres === "" || $apellidos === "") {
+                $especialidades = DaoEspecialidad::getAllEspecialidades();
+                $this->viewData["error"] = "Todos los campos obligatorios deben ser válidos.";
+                Renderer::render("medico_create", ["especialidades" => $especialidades, "error" => "Datos inválidos."]);
+                return;
+            }
 
             DaoMedicos::insertMedico(
-                intval($_POST["especialidad_id"] ?? 0),
-                $_POST["nombres"] ?? "",
-                $_POST["apellidos"] ?? "",
-                $_POST["num_colegiatura"] ?? "",
-                $_POST["telefono"] ?? ""
+                $especialidadId,
+                $nombres,
+                $apellidos,
+                $numColegiatura,
+                $telefono
             );
 
             Site::redirectTo("index.php?page=MedicosController&action=index");
@@ -113,22 +125,35 @@ class MedicosController extends PublicController
     {
         $this->authorizeCrud();
 
-        $id = intval($_GET["id"] ?? 0);
+        $id = \Utilities\Validators::sanitizeId($_GET["id"] ?? 0);
 
-        if ($id <= 0) {
+        if ($id === null || $id <= 0) {
             Site::redirectTo("index.php?page=MedicosController&action=index");
             exit;
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $especialidadId = \Utilities\Validators::sanitizeId($_POST["especialidad_id"] ?? 0);
+            $nombres = \Utilities\Validators::sanitizeString($_POST["nombres"] ?? "");
+            $apellidos = \Utilities\Validators::sanitizeString($_POST["apellidos"] ?? "");
+            $numColegiatura = \Utilities\Validators::sanitizeString($_POST["num_colegiatura"] ?? "");
+            $telefono = \Utilities\Validators::sanitizeString($_POST["telefono"] ?? "");
+
+            if ($especialidadId === null || $nombres === "" || $apellidos === "") {
+                $medico = DaoMedicos::getMedicoById($id);
+                $especialidades = DaoEspecialidad::getAllEspecialidades();
+                $this->viewData["error"] = "Todos los campos obligatorios deben ser válidos.";
+                Renderer::render("medico_edit", ["medico" => $medico, "especialidades" => $especialidades, "error" => "Datos inválidos."]);
+                return;
+            }
 
             DaoMedicos::updateMedico(
                 $id,
-                intval($_POST["especialidad_id"] ?? 0),
-                $_POST["nombres"] ?? "",
-                $_POST["apellidos"] ?? "",
-                $_POST["num_colegiatura"] ?? "",
-                $_POST["telefono"] ?? ""
+                $especialidadId,
+                $nombres,
+                $apellidos,
+                $numColegiatura,
+                $telefono
             );
 
             Site::redirectTo("index.php?page=MedicosController&action=index");

@@ -52,13 +52,13 @@ class Users extends PrivateController
     private function getParams(): void
     {
         // Lee filtros y paginacion enviados por querystring
-        $this->partialName = $_GET["partialName"] ?? $this->partialName;
-        $this->status = $_GET["status"] ?? $this->status;
-        $this->usertipo = $_GET["usertipo"] ?? $this->usertipo;
-        $this->orderBy = $_GET["orderBy"] ?? $this->orderBy;
+        $this->partialName = \Utilities\Validators::sanitizeString($_GET["partialName"] ?? $this->partialName);
+        $this->status = \Utilities\Validators::sanitizeAlphaNum($_GET["status"] ?? $this->status);
+        $this->usertipo = \Utilities\Validators::sanitizeAlphaNum($_GET["usertipo"] ?? $this->usertipo);
+        $this->orderBy = \Utilities\Validators::sanitizeAlphaNum($_GET["orderBy"] ?? $this->orderBy);
         $this->orderDescending = isset($_GET["orderDescending"]) ? boolval($_GET["orderDescending"]) : $this->orderDescending;
-        $this->pageNumber = intval($_GET["pageNum"] ?? $this->pageNumber);
-        $this->itemsPerPage = intval($_GET["itemsPerPage"] ?? $this->itemsPerPage);
+        $this->pageNumber = \Utilities\Validators::sanitizeInt($_GET["pageNum"] ?? $this->pageNumber, 1) ?? $this->pageNumber;
+        $this->itemsPerPage = \Utilities\Validators::sanitizeInt($_GET["itemsPerPage"] ?? $this->itemsPerPage, 1, 100) ?? $this->itemsPerPage;
     }
 
     // =============================

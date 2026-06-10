@@ -66,7 +66,7 @@ class User extends PrivateController
     private function getData()
     {
         // Carga datos iniciales segaUn modo y usuario objetivo
-        $this->mode = $_GET["mode"] ?? "NOF";
+        $this->mode = \Utilities\Validators::sanitizeAlphaNum($_GET["mode"] ?? "NOF");
 
         if (!isset($this->modeDescriptions[$this->mode])) {
             throw new \Exception("Modo inválido");
@@ -90,7 +90,11 @@ class User extends PrivateController
                 "usertipo" => "NOR"
             ];
         } else {
-            $userData = DaoUsers::getUserById(intval($_GET["id"]));
+            $id = \Utilities\Validators::sanitizeId($_GET["id"] ?? 0);
+            if ($id === null) {
+                throw new \Exception("ID de usuario inválido");
+            }
+            $userData = DaoUsers::getUserById($id);
             if (!$userData) {
                 throw new \Exception("Usuario no encontrado");
             }
@@ -119,15 +123,15 @@ class User extends PrivateController
         // Valida entradas y aplica restricciones de autoediciaIn
         $errors = [];
 
-        $this->user["usercod"] = intval($_POST["usercod"] ?? 0);
-        $this->user["username"] = trim($_POST["username"] ?? "");
+        $this->user["usercod"] = \Utilities\Validators::sanitizeInt($_POST["usercod"] ?? 0);
+        $this->user["username"] = \Utilities\Validators::sanitizeString($_POST["username"] ?? "");
         $this->user["useractcod"] = "admin";
         $this->user["userfching"] = date("Y-m-d H:i:s");
         $this->user["userpswdexp"] = date("Y-m-d H:i:s", strtotime("+90 days"));
 
         // Email: solo editable en INS, en UPD/DEL se conserva el de la BD
         if ($this->mode === "INS") {
-            $this->user["useremail"] = trim($_POST["useremail"] ?? "");
+            $this->user["useremail"] = \Utilities\Validators::sanitizeEmail($_POST["useremail"] ?? "");
         }
 
         // Estado y Tipo: si se edita a si mismo, conservar los de la BD
@@ -136,19 +140,19 @@ class User extends PrivateController
             $this->user["userest"] = $currentData["userest"];
             $this->user["usertipo"] = $currentData["usertipo"];
         } else {
-            $this->user["userest"] = $_POST["userest"] ?? "ACT";
-            $this->user["usertipo"] = $_POST["usertipo"] ?? "NOR";
+            $this->user["userest"] = \Utilities\Validators::sanitizeAlphaNum($_POST["userest"] ?? "ACT");
+            $this->user["usertipo"] = \Utilities\Validators::sanitizeAlphaNum($_POST["usertipo"] ?? "NOR");
         }
 
         if ($this->mode === "INS") {
             $this->user["userpswd"] = trim($_POST["userpswd"] ?? "");
         }
 
-        if (Validators::IsEmpty($this->user["username"]))
+        if (\Utilities\Validators::IsEmpty($this->user["username"]))
             $errors["username_error"] = "Nombre requerido";
-        if ($this->mode === "INS" && Validators::IsEmpty($this->user["useremail"]))
+        if ($this->mode === "INS" && ($this->user["useremail"] === null || \Utilities\Validators::IsEmpty($this->user["useremail"])))
             $errors["useremail_error"] = "Email requerido";
-        if ($this->mode === "INS" && Validators::IsEmpty($this->user["userpswd"]))
+        if ($this->mode === "INS" && \Utilities\Validators::IsEmpty($this->user["userpswd"]))
             $errors["userpswd_error"] = "Password requerido";
         if (!in_array($this->user["userest"], ["ACT", "INA"]))
             $errors["userest_error"] = "Estado inválido";
@@ -173,6 +177,7 @@ class User extends PrivateController
         switch ($this->mode) {
             case "INS":
                 $hashedPswd = \Dao\Security\Security::hashPasswordPublic($this->user["userpswd"]);
+                $now = date("Y-m-d H:i:s");
                 $newId = DaoUsers::insertUser(
                     $this->user["username"],
                     $this->user["useremail"],
@@ -182,7 +187,7 @@ class User extends PrivateController
                     $this->user["userpswdexp"],
                     $this->user["userest"],
                     $this->user["useractcod"],
-                    $hashedPswd,
+                    $now,  // userpswdchg should be datetime, not password hash
                     $this->user["usertipo"]
                 );
                 $this->assignRole(intval($newId), $this->user["usertipo"]);

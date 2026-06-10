@@ -141,14 +141,24 @@
     border: 1px solid var(--sc-blue-200);
   }
   .appointment-status.estado-2 {
-    background: #fff0f0;
-    color: var(--sc-danger);
-    border: 1px solid #fecaca;
+    background: #f0fdf4;
+    color: var(--sc-success);
+    border: 1px solid #bbf7d0;
   }
   .appointment-status.estado-3 {
     background: #f0fdf4;
     color: var(--sc-success);
     border: 1px solid #bbf7d0;
+  }
+  .appointment-status.estado-4 {
+    background: #fff0f0;
+    color: var(--sc-danger);
+    border: 1px solid #fecaca;
+  }
+  .appointment-status.estado-5 {
+    background: #fff0f0;
+    color: var(--sc-danger);
+    border: 1px solid #fecaca;
   }
   .empty-state {
     text-align: center;

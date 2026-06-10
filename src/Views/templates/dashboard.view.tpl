@@ -387,8 +387,10 @@
     font-weight: 500;
     border: 1px solid var(--sc-blue-200);
   }
-  .calendar-event.estado-2 { background: #fff0f0; color: var(--sc-danger); border-color: #fecaca; } /* Cancelada */
+  .calendar-event.estado-2 { background: #f0fdf4; color: var(--sc-success); border-color: #bbf7d0; } /* Confirmada */
   .calendar-event.estado-3 { background: #f0fdf4; color: var(--sc-success); border-color: #bbf7d0; } /* Completada */
+  .calendar-event.estado-4 { background: #fff0f0; color: var(--sc-danger); border-color: #fecaca; } /* Cancelada */
+  .calendar-event.estado-5 { background: #fff0f0; color: var(--sc-danger); border-color: #fecaca; } /* No Asistió */
   .calendar-more {
     font-size: 0.5rem;
     color: var(--sc-blue-700);
@@ -416,8 +418,10 @@
     border-radius: 50%;
   }
   .legend-dot.pending { background: var(--sc-blue-200); }
+  .legend-dot.confirmed { background: var(--sc-success); }
   .legend-dot.completed { background: var(--sc-success); }
   .legend-dot.cancelled { background: var(--sc-danger); }
+  .legend-dot.no-show { background: var(--sc-danger); }
 
   @media (max-width: 980px) {
     .calendar-day {
@@ -689,8 +693,10 @@
     </div>
     <div class="calendar-legend">
       <span class="legend-item"><span class="legend-dot pending"></span>Pendiente</span>
+      <span class="legend-item"><span class="legend-dot confirmed"></span>Confirmada</span>
       <span class="legend-item"><span class="legend-dot completed"></span>Completada</span>
       <span class="legend-item"><span class="legend-dot cancelled"></span>Cancelada</span>
+      <span class="legend-item"><span class="legend-dot no-show"></span>No Asistió</span>
     </div>
   </section>
 

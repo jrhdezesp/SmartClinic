@@ -44,7 +44,7 @@ class PacientesController extends PublicController
         $isAdmin = $userId === 1 || Security::isInRol($userId, 1);
         $showCrudActions = Security::isAuthorized($userId, 'PacientesController', 'CTR') || $isAdmin;
 
-        $search = trim(strval($_GET["search"] ?? ""));
+        $search = \Utilities\Validators::sanitizeString($_GET["search"] ?? "");
         $pacientes = DaoPacientes::getAllPacientes();
         if ($search !== "") {
             $searchLower = strtolower($search);
@@ -68,14 +68,26 @@ class PacientesController extends PublicController
         $this->authorizeCrud();
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $identidad = \Utilities\Validators::sanitizeAlphaNum($_POST["identidad"] ?? "");
+            $nombres = \Utilities\Validators::sanitizeString($_POST["nombres"] ?? "");
+            $apellidos = \Utilities\Validators::sanitizeString($_POST["apellidos"] ?? "");
+            $fechaNacimiento = \Utilities\Validators::sanitizeDate($_POST["fecha_nacimiento"] ?? "");
+            $telefono = \Utilities\Validators::sanitizeString($_POST["telefono"] ?? "");
+            $direccion = \Utilities\Validators::sanitizeString($_POST["direccion"] ?? "");
+
+            if ($identidad === "" || $nombres === "" || $apellidos === "" || $fechaNacimiento === null) {
+                $this->viewData["error"] = "Todos los campos obligatorios deben ser válidos.";
+                Renderer::render("paciente_create", $this->viewData);
+                return;
+            }
 
             DaoPacientes::insertPaciente(
-                $_POST["identidad"] ?? "",
-                $_POST["nombres"] ?? "",
-                $_POST["apellidos"] ?? "",
-                $_POST["fecha_nacimiento"] ?? "",
-                $_POST["telefono"] ?? "",
-                $_POST["direccion"] ?? ""
+                $identidad,
+                $nombres,
+                $apellidos,
+                $fechaNacimiento,
+                $telefono,
+                $direccion
             );
 
             Site::redirectTo("index.php?page=PacientesController&action=index");
@@ -100,23 +112,36 @@ class PacientesController extends PublicController
     {
         $this->authorizeCrud();
 
-        $id = intval($_GET["id"] ?? 0);
+        $id = \Utilities\Validators::sanitizeId($_GET["id"] ?? 0);
 
-        if ($id <= 0) {
+        if ($id === null || $id <= 0) {
             Site::redirectTo("index.php?page=PacientesController&action=index");
             exit;
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $identidad = \Utilities\Validators::sanitizeAlphaNum($_POST["identidad"] ?? "");
+            $nombres = \Utilities\Validators::sanitizeString($_POST["nombres"] ?? "");
+            $apellidos = \Utilities\Validators::sanitizeString($_POST["apellidos"] ?? "");
+            $fechaNacimiento = \Utilities\Validators::sanitizeDate($_POST["fecha_nacimiento"] ?? "");
+            $telefono = \Utilities\Validators::sanitizeString($_POST["telefono"] ?? "");
+            $direccion = \Utilities\Validators::sanitizeString($_POST["direccion"] ?? "");
+
+            if ($identidad === "" || $nombres === "" || $apellidos === "" || $fechaNacimiento === null) {
+                $paciente = DaoPacientes::getPacienteById($id);
+                $this->viewData["error"] = "Todos los campos obligatorios deben ser válidos.";
+                Renderer::render("paciente_edit", ["paciente" => $paciente, "error" => "Datos inválidos."]);
+                return;
+            }
 
             DaoPacientes::updatePaciente(
                 $id,
-                $_POST["identidad"] ?? "",
-                $_POST["nombres"] ?? "",
-                $_POST["apellidos"] ?? "",
-                $_POST["fecha_nacimiento"] ?? "",
-                $_POST["telefono"] ?? "",
-                $_POST["direccion"] ?? ""
+                $identidad,
+                $nombres,
+                $apellidos,
+                $fechaNacimiento,
+                $telefono,
+                $direccion
             );
 
             Site::redirectTo("index.php?page=PacientesController&action=index");
